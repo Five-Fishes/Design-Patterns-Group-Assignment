@@ -1,4 +1,4 @@
-package draft.observer;
+package prototype.observer;
 
 public interface Subject {
 

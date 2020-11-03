@@ -1,4 +1,4 @@
-package draft.observer;
+package prototype.observer;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
