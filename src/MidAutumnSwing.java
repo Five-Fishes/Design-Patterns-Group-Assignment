@@ -1,11 +1,14 @@
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.*;
-import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
-public class XmasTreeSwing extends JFrame implements ActionListener {
+public class MidAutumnSwing extends JFrame implements ActionListener {
     //Buttons
     private JButton lightButton;
     private JButton presentButton;
@@ -20,7 +23,7 @@ public class XmasTreeSwing extends JFrame implements ActionListener {
     private JLabel title, imageLabel, buttonLabel;
 
     //Image
-    private ImageIcon image;
+    private BufferedImage image;
 
     //Boolean
 //   private boolean presents = true;
@@ -31,14 +34,15 @@ public class XmasTreeSwing extends JFrame implements ActionListener {
     private boolean ornaments = false;
     private boolean lights = false;
 
-    public XmasTreeSwing() {
+
+    public MidAutumnSwing() {
         //Set title
         setTitle("Decorate the Christmas tree!");
 
         setLayout(new BorderLayout());
 
         //Setting the title of the JLabel
-        title = new JLabel("Click on the button to add the adornment to the tree.");
+        title = new JLabel("Creative Designed By 30000007333 From <a href=\"https://lovepik.com/image-400492940/mid-autumn-festival-background.html\">LovePik.com</a>");
 
         //Setting the font
         title.setFont(new Font("CENTURY GOTHIC", Font.ITALIC, 15));
@@ -58,14 +62,18 @@ public class XmasTreeSwing extends JFrame implements ActionListener {
         imagePanel = new JPanel();
 
         //Retrieving image from the file
-        image = new ImageIcon(getClass().getResource("tree1.jpg"));
+        try {
+            image = ImageIO.read(new File("src/background.jpg"));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
 
 
         //Adding the image to a label
-        imageLabel = new JLabel(image);
+//        imageLabel = new JLabel(image);
 
         //Adding image label to the image panel
-        imagePanel.add(imageLabel);
+//        imagePanel.add(imageLabel);
 
         //Setting colour of image panel
         imagePanel.setBackground(Color.white);
@@ -149,6 +157,7 @@ public class XmasTreeSwing extends JFrame implements ActionListener {
     public void paint(Graphics g) {
         //Call the paint method of the superclass
         super.paint(g);
+        g.drawImage(image, 0, 0, this);
 
         if (lights) {
             //draw lights
@@ -251,7 +260,7 @@ public class XmasTreeSwing extends JFrame implements ActionListener {
     } //actionPerformed
 
     public static void main(String[] args) {
-        XmasTreeSwing gui = new XmasTreeSwing();
+        MidAutumnSwing gui = new MidAutumnSwing();
 
     }//main
 
