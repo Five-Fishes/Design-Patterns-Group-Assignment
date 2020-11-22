@@ -34,6 +34,8 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
     private boolean ornaments = false;
     private boolean lights = false;
 
+    private final int buttonPanelWidth = 300;
+    private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
     public MidAutumnSwing() {
         //Set title
@@ -143,13 +145,16 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         add(titlePanel, BorderLayout.NORTH);
         add(imagePanel, BorderLayout.CENTER);
         imagePanel.add(infoPanel, BorderLayout.NORTH);
-        add(buttonPanel, BorderLayout.SOUTH);
+        add(buttonPanel, BorderLayout.WEST);
+
+        // set buttonPanel width and height
+        buttonPanel.setPreferredSize(new Dimension(buttonPanelWidth, 650));
 
         //Configure the frame
         getContentPane().setBackground(Color.white);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(500, 650);
-        setLocation(300, 40);
+        setSize(screenSize);
+        setLocation(0, 0);
         setVisible(true);
 
     }//Constructor
@@ -157,7 +162,10 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
     public void paint(Graphics g) {
         //Call the paint method of the superclass
         super.paint(g);
-        g.drawImage(image, 0, 0, this);
+
+        int imageWidth = (int) (screenSize.getWidth() - buttonPanelWidth);
+        Image resizedImage = image.getScaledInstance(imageWidth, -1, Image. SCALE_SMOOTH);
+        g.drawImage(resizedImage, buttonPanelWidth, 0, this);
 
         if (lights) {
             //draw lights
