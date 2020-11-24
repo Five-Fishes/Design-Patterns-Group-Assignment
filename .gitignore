@@ -11,6 +11,11 @@
 .settings/
 
 
+# intellij
+out/production/Design-Patterns-Group-Assignment/META-INF/Design-Patterns-Group-Assignment.kotlin_module
+.idea
+*.iml
+
 # MacOS
 
 .DS_Store
