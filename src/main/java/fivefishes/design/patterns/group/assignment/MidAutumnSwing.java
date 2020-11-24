@@ -268,9 +268,4 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
 
     } //actionPerformed
 
-    public static void main(String[] args) {
-        MidAutumnSwing gui = new MidAutumnSwing();
-
-    }//main
-
 }//class
