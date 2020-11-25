@@ -12,9 +12,6 @@ import java.io.IOException;
 public class MidAutumnSwing extends JFrame implements ActionListener {
     //Buttons
     private JButton lightButton;
-    private JButton presentButton;
-    private JButton ornamentButton;
-    private JButton addAllButton;
     private JButton exitButton;
 
     //Panels
@@ -26,16 +23,12 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
     //Image
     private BufferedImage image;
 
-    //Boolean
-//   private boolean presents = true;
-//   private boolean ornaments = true;
-//   private boolean lights = true;
 
-    private boolean presents = false;
-    private boolean ornaments = false;
     private boolean lights = false;
 
-    private final int buttonPanelWidth = 300;
+    private final int buttonPanelHeight = 150;
+    private int imageStartXaxis;
+    private int imageStartYaxis;
     private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
     public MidAutumnSwing() {
@@ -71,9 +64,11 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
             ex.printStackTrace();
         }
 
+        // resize image to Panel size
+//        Image resizeImage = image.getScaledInstance(1050, 525, Image.SCALE_SMOOTH);
 
         //Adding the image to a label
-//        imageLabel = new JLabel(image);
+//        imageLabel = new JLabel(new ImageIcon(image));
 
         //Adding image label to the image panel
 //        imagePanel.add(imageLabel);
@@ -102,54 +97,36 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
 
         //Naming buttons
         lightButton = new JButton("Lights");
-        presentButton = new JButton("Presents");
-        ornamentButton = new JButton("Ornaments");
-        addAllButton = new JButton("Add All");
         exitButton = new JButton("Exit");
 
         //Setting colour of buttons
         lightButton.setBackground(Color.red);
-        ornamentButton.setBackground(Color.red);
-        presentButton.setBackground(Color.red);
-        addAllButton.setBackground(Color.red);
         exitButton.setBackground(Color.red);
 
         //Setting font on buttons
         lightButton.setFont(new Font("CENTURY GOTHIC", Font.ITALIC, 16));
-        ornamentButton.setFont(new Font("CENTURY GOTHIC", Font.ITALIC, 16));
-        presentButton.setFont(new Font("CENTURY GOTHIC", Font.ITALIC, 16));
-        addAllButton.setFont(new Font("CENTURY GOTHIC", Font.ITALIC, 16));
         exitButton.setFont(new Font("CENTURY GOTHIC", Font.ITALIC, 16));
 
         //Setting font colour on buttons
         lightButton.setForeground(Color.white);
-        ornamentButton.setForeground(Color.white);
-        presentButton.setForeground(Color.white);
-        addAllButton.setForeground(Color.white);
         exitButton.setForeground(Color.white);
 
         //Add the buttons to the buttonPanel
         buttonPanel.add(lightButton);
-        buttonPanel.add(ornamentButton);
-        buttonPanel.add(presentButton);
-        buttonPanel.add(addAllButton);
         buttonPanel.add(exitButton);
 
         //Enable buttons to listen for a mouse-click
         lightButton.addActionListener(this);
-        ornamentButton.addActionListener(this);
-        presentButton.addActionListener(this);
-        addAllButton.addActionListener(this);
         exitButton.addActionListener(this);
 
         //Positioning Panels
         add(titlePanel, BorderLayout.NORTH);
         add(imagePanel, BorderLayout.CENTER);
         imagePanel.add(infoPanel, BorderLayout.NORTH);
-        add(buttonPanel, BorderLayout.WEST);
+        add(buttonPanel, BorderLayout.SOUTH);
 
         // set buttonPanel width and height
-        buttonPanel.setPreferredSize(new Dimension(buttonPanelWidth, 650));
+        buttonPanel.setPreferredSize(new Dimension((int) screenSize.getWidth(), buttonPanelHeight));
 
         //Configure the frame
         getContentPane().setBackground(Color.white);
@@ -164,66 +141,12 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         //Call the paint method of the superclass
         super.paint(g);
 
-        int imageWidth = (int) (screenSize.getWidth() - buttonPanelWidth);
-        Image resizedImage = image.getScaledInstance(imageWidth, -1, Image. SCALE_SMOOTH);
-        g.drawImage(resizedImage, buttonPanelWidth, 0, this);
+        int imageHeight = (int) (screenSize.getHeight() - buttonPanelHeight - 20);
+        Image resizedImage = image.getScaledInstance(-1, imageHeight, Image. SCALE_SMOOTH);
 
-        if (lights) {
-            //draw lights
-            g.setColor(Color.white);
-
-            //middle lights
-            g.fillOval(250, 190, 10, 10);
-            g.fillOval(250, 260, 10, 10);
-            g.fillOval(250, 350, 10, 10);
-            g.fillOval(250, 430, 10, 10);
-
-            //left lights
-            g.fillOval(200, 260, 10, 10);
-            g.fillOval(180, 350, 10, 10);
-            g.fillOval(160, 430, 10, 10);
-
-            //right lights
-            g.fillOval(300, 260, 10, 10);
-            g.fillOval(330, 350, 10, 10);
-            g.fillOval(340, 430, 10, 10);
-
-        }//if lights
-
-        if (ornaments) {
-            //draw ornaments
-            g.setColor(Color.red);
-            g.fillOval(220, 220, 15, 15);
-            g.fillOval(280, 220, 15, 15);
-            g.setColor(Color.blue);
-            g.fillOval(320, 380, 15, 15);
-            g.fillOval(180, 380, 15, 15);
-            g.setColor(Color.cyan);
-            g.fillOval(200, 300, 15, 15);
-            g.fillOval(300, 300, 15, 15);
-
-        }//if ornaments
-
-        if (presents) {
-            //draw presents
-            g.setColor(Color.red);
-            //   g.fillRect(320,500,60,60);
-            //    g.fillRect(140,480,30,30);
-            g.fillRect(320, 400, 60, 60);
-            g.fillRect(140, 380, 30, 30);
-
-            g.setColor(Color.orange);
-            //   g.fillRect(180,530,40,40);
-            g.fillRect(180, 430, 40, 40);
-
-            g.setColor(Color.blue);
-            //     g.fillRect(120,500,60,60);
-            //   g.fillRect(360,540,30,30);
-
-            g.fillRect(120, 400, 60, 60);
-            g.fillRect(360, 440, 30, 30);
-
-        }//if presents
+        imageStartXaxis = (int) (screenSize.getWidth() - resizedImage.getWidth(null)) / 2;
+        imageStartYaxis = 10;
+        g.drawImage(resizedImage, imageStartXaxis, imageStartYaxis, this);
 
     } //paint
 
@@ -231,35 +154,10 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent event) {
 
         if (event.getSource() == lightButton) {
-            ornaments = false;
-            presents = false;
             lights = true;
             repaint();
 
         }//if light
-
-        else if (event.getSource() == ornamentButton) {
-            lights = false;
-            presents = false;
-            ornaments = true;
-            repaint();
-
-        }//if ornament
-
-        else if (event.getSource() == presentButton) {
-            lights = false;
-            ornaments = false;
-            presents = true;
-            repaint();
-
-        }//if present
-
-        else if (event.getSource() == addAllButton) {
-            lights = true;
-            ornaments = true;
-            presents = true;
-            repaint();
-        }//if add all
 
         else {
             System.exit(0);
