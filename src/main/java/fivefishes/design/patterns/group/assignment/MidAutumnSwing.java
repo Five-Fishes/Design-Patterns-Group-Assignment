@@ -1,5 +1,9 @@
 package fivefishes.design.patterns.group.assignment;
 
+import fivefishes.design.patterns.group.assignment.entities.ChangErFashion;
+import fivefishes.design.patterns.group.assignment.entities.History;
+import fivefishes.design.patterns.group.assignment.entities.enumeration.Fashion;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -13,6 +17,17 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
     //Buttons
     private JButton lightButton;
     private JButton exitButton;
+
+    // Memento
+    ChangErFashion changErFashion = new ChangErFashion();
+    History changeErFashionHistory = new History();
+    private Fashion[] changeErFashionList = Fashion.values();
+    private JComboBox<String> changErFashionOptions = new JComboBox<>();
+    private JButton undoButton;
+    private JButton redoButton;
+    private BufferedImage changErImage;
+    private int changErImageXaxis;
+    private int changErImageYaxis;
 
     //Panels
     private JPanel titlePanel, imagePanel, buttonPanel, infoPanel;
@@ -95,6 +110,29 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         infoPanel.add(buttonLabel);
         infoPanel.setBackground(Color.white);
 
+        // Dropdown Construct and Config
+        for (Fashion changeErFashion: changeErFashionList) {
+            changErFashionOptions.addItem(changeErFashion.name());
+        }
+
+        changErFashionOptions.addActionListener(this);
+        undoButton = new JButton("Undo");
+        redoButton = new JButton("Redo");
+        undoButton.setBackground(Color.red);
+        redoButton.setBackground(Color.green);
+        undoButton.setFont(new Font("CENTURY GOTHIC", Font.ITALIC, 16));
+        redoButton.setFont(new Font("CENTURY GOTHIC", Font.ITALIC, 16));
+        undoButton.setForeground(Color.white);
+        redoButton.setForeground(Color.white);
+        undoButton.addActionListener(this);
+        redoButton.addActionListener(this);
+        buttonPanel.add(undoButton);
+        buttonPanel.add(redoButton);
+        changErImageXaxis = (int) screenSize.getWidth() - 350;
+        changErImageYaxis = 100;
+        defaultChangEr();
+
+
         //Naming buttons
         lightButton = new JButton("Lights");
         exitButton = new JButton("Exit");
@@ -113,6 +151,7 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
 
         //Add the buttons to the buttonPanel
         buttonPanel.add(lightButton);
+        buttonPanel.add(changErFashionOptions);
         buttonPanel.add(exitButton);
 
         //Enable buttons to listen for a mouse-click
@@ -147,23 +186,59 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         imageStartXaxis = (int) (screenSize.getWidth() - resizedImage.getWidth(null)) / 2;
         imageStartYaxis = 10;
         g.drawImage(resizedImage, imageStartXaxis, imageStartYaxis, this);
+        if (changErImage != null) {
+            Image resizedChangErImage = changErImage.getScaledInstance(-1, 180, Image.SCALE_SMOOTH);
+            g.drawImage(resizedChangErImage, changErImageXaxis, changErImageYaxis, this);
+        }
 
     } //paint
 
     //Coding the event-handling routine
-    public void actionPerformed(ActionEvent event) {
-
-        if (event.getSource() == lightButton) {
-            lights = true;
-            repaint();
-
-        }//if light
-
-        else {
+    public void actionPerformed(ActionEvent event){
+        System.out.println(event.getSource());
+        if (event.getSource() == exitButton) {
             System.exit(0);
-
-        }//else exit
+        } else {
+            if (event.getSource() == undoButton) {
+                changErFashion.getFromChangErMemento(changeErFashionHistory.undo());
+                try {
+                    readFashionImage();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else if (event.getSource() == redoButton) {
+                changErFashion.getFromChangErMemento(changeErFashionHistory.redo());
+                try {
+                    readFashionImage();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else if (event.getSource() == changErFashionOptions) {
+                changErFashion.setFashionType((String) changErFashionOptions.getSelectedItem());
+                changeErFashionHistory.add(changErFashion.createMemento());
+                try {
+                    readFashionImage();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            repaint();
+        }
 
     } //actionPerformed
+
+    public void readFashionImage() throws IOException {
+        changErImage = ImageIO.read(new File(changErFashion.getChangErImageUrl()));
+    }
+
+    public void defaultChangEr() {
+        changErFashion.setFashionType(changErFashionOptions.getItemAt(0));
+        changeErFashionHistory.add(changErFashion.createMemento());
+        try {
+            readFashionImage();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 }//class
