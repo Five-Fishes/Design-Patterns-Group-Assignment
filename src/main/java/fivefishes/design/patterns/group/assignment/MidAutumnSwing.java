@@ -2,6 +2,9 @@ package fivefishes.design.patterns.group.assignment;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+
+import fivefishes.design.patterns.group.assignment.entities.house;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.*;
@@ -124,6 +127,7 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         add(imagePanel, BorderLayout.CENTER);
         imagePanel.add(infoPanel, BorderLayout.NORTH);
         add(buttonPanel, BorderLayout.SOUTH);
+        add(new house(), BorderLayout.CENTER);
 
         // set buttonPanel width and height
         buttonPanel.setPreferredSize(new Dimension((int) screenSize.getWidth(), buttonPanelHeight));
