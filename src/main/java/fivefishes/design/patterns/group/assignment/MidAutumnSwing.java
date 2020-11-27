@@ -1,5 +1,11 @@
 package fivefishes.design.patterns.group.assignment;
 
+import fivefishes.design.patterns.group.assignment.entities.AudioPlayerObserver;
+import fivefishes.design.patterns.group.assignment.entities.ClockSubject;
+import fivefishes.design.patterns.group.assignment.entities.ClockWorker;
+import fivefishes.design.patterns.group.assignment.interfaces.Observer;
+import fivefishes.design.patterns.group.assignment.interfaces.Subject;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -8,8 +14,18 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class MidAutumnSwing extends JFrame implements ActionListener {
+
+    private Observer audioPlayerObserver = new AudioPlayerObserver();
+    private Subject clockSubject = new ClockSubject();
+    private JLabel clockLabel = new JLabel();
+    ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
+
+
     //Buttons
     private JButton lightButton;
     private JButton exitButton;
@@ -95,6 +111,10 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         infoPanel.add(buttonLabel);
         infoPanel.setBackground(Color.white);
 
+        clockSubject.register(audioPlayerObserver);
+        Runnable runnable = () -> clockSubject.notifyObserver();
+        executorService.scheduleAtFixedRate(runnable, 0, 1, TimeUnit.MINUTES);
+
         //Naming buttons
         lightButton = new JButton("Lights");
         exitButton = new JButton("Exit");
@@ -114,6 +134,7 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         //Add the buttons to the buttonPanel
         buttonPanel.add(lightButton);
         buttonPanel.add(exitButton);
+        buttonPanel.add(clockLabel, BorderLayout.SOUTH);
 
         //Enable buttons to listen for a mouse-click
         lightButton.addActionListener(this);
