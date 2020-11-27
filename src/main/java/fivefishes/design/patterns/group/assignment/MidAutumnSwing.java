@@ -22,7 +22,7 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
 
     private Observer audioPlayerObserver = new AudioPlayerObserver();
     private Subject clockSubject = new ClockSubject();
-    private JLabel clockLabel = new JLabel();
+    private JLabel clockLabel = new JLabel("A song is played every 1 minute");
     ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
 
 
