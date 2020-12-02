@@ -141,14 +141,9 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         //Call the paint method of the superclass
         super.paint(g);
 
-        Graphics2D graphics2D = (Graphics2D) g.create();
-        graphics2D.drawImage(staticTestImage, 500, 500, null);
-        // Set Clip to area containing components you wan to repaint
-        graphics2D.setClip(new Rectangle(100, 100, 100, 100));
-        // Perform drawing here using graphics2D.drawImage()
-        graphics2D.drawImage(testImage, 100, 100, null);
-
-
+        // Perform drawing here using g.drawImage()
+        g.drawImage(testImage, 100, 100, null);
+        g.drawImage(staticTestImage, 500, 500, null);
     } //paint
 
     //Coding the event-handling routine
