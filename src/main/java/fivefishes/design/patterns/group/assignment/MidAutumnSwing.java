@@ -15,16 +15,19 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
     private JButton exitButton;
 
     //Panels
-    private JPanel titlePanel, imagePanel, buttonPanel, infoPanel;
+    private JPanel titlePanel, backgroundImagePanel, buttonPanel;
 
     //Labels
-    private JLabel title, imageLabel, buttonLabel;
+    private JLabel title, backgroundImageLabel;
 
     //Image
     private BufferedImage image;
 
 
     private boolean lights = false;
+
+    private int imageHeight;
+    private Image resizedImage;
 
     private final int buttonPanelHeight = 150;
     private int imageStartXaxis;
@@ -55,7 +58,7 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         titlePanel.setBackground(Color.white);
 
         //Creating a new JPanel for the image to go
-        imagePanel = new JPanel();
+        backgroundImagePanel = new JPanel();
 
         //Retrieving image from the file
         try {
@@ -64,36 +67,18 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
             ex.printStackTrace();
         }
 
-        // resize image to Panel size
-//        Image resizeImage = image.getScaledInstance(1050, 525, Image.SCALE_SMOOTH);
-
+        backgroundImageConfiguration();
         //Adding the image to a label
-//        imageLabel = new JLabel(new ImageIcon(image));
+        backgroundImageLabel = new JLabel(new ImageIcon(resizedImage));
 
-        //Adding image label to the image panel
-//        imagePanel.add(imageLabel);
-
-        //Setting colour of image panel
-        imagePanel.setBackground(Color.white);
+        backgroundImagePanel.add(backgroundImageLabel);
+        backgroundImagePanel.setBackground(Color.white);
 
         //Creating a new JPanel for the buttons to go
         buttonPanel = new JPanel();
 
         //Setting colour of button panel
         buttonPanel.setBackground(Color.white);
-
-        //Button Label
-        // buttonLabel = new JLabel("Click on the button to add the item to the tree.");
-        buttonLabel = new JLabel("");
-        buttonLabel.setFont(new Font("CENTURY GOTHIC", Font.ITALIC, 16));
-        buttonLabel.setForeground(Color.red);
-        buttonLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        buttonLabel.setBackground(Color.white);
-
-        //Info panel
-        infoPanel = new JPanel();
-        infoPanel.add(buttonLabel);
-        infoPanel.setBackground(Color.white);
 
         //Naming buttons
         lightButton = new JButton("Lights");
@@ -121,15 +106,15 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
 
         //Positioning Panels
         add(titlePanel, BorderLayout.NORTH);
-        add(imagePanel, BorderLayout.CENTER);
-        imagePanel.add(infoPanel, BorderLayout.NORTH);
+        add(backgroundImagePanel, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
 
         // set buttonPanel width and height
         buttonPanel.setPreferredSize(new Dimension((int) screenSize.getWidth(), buttonPanelHeight));
 
         //Configure the frame
-        getContentPane().setBackground(Color.white);
+//        getContentPane().setBackground(Color.white);
+//        getContentPane().add(panelContainer);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(screenSize);
         setLocation(0, 0);
@@ -141,12 +126,8 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         //Call the paint method of the superclass
         super.paint(g);
 
-        int imageHeight = (int) (screenSize.getHeight() - buttonPanelHeight - 20);
-        Image resizedImage = image.getScaledInstance(-1, imageHeight, Image. SCALE_SMOOTH);
-
-        imageStartXaxis = (int) (screenSize.getWidth() - resizedImage.getWidth(null)) / 2;
-        imageStartYaxis = 10;
-        g.drawImage(resizedImage, imageStartXaxis, imageStartYaxis, this);
+        Graphics2D graphics2D = (Graphics2D) g.create();
+//        Perform drawing here using graphics2D.drawImage()
 
     } //paint
 
@@ -165,5 +146,13 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         }//else exit
 
     } //actionPerformed
+
+    private void backgroundImageConfiguration() {
+        imageHeight = (int) (screenSize.getHeight() - buttonPanelHeight - 20);
+        resizedImage = image.getScaledInstance(-1, imageHeight, Image. SCALE_SMOOTH);
+
+        imageStartXaxis = (int) (screenSize.getWidth() - resizedImage.getWidth(null)) / 2;
+        imageStartYaxis = 10;
+    }
 
 }//class
