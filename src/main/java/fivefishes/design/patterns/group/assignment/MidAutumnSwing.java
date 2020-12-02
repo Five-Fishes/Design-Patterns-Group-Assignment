@@ -34,6 +34,11 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
     private int imageStartYaxis;
     private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
+    private String testImageUrl;
+    private Image testImage;
+    private String staticTestImageUrl = "src/main/java/fivefishes/design/patterns/group/assignment/resources/ChangEr/redblue.png";
+    private Image staticTestImage;
+
     public MidAutumnSwing() {
         //Set title
         setTitle("Decorate the Christmas tree!");
@@ -112,6 +117,16 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         // set buttonPanel width and height
         buttonPanel.setPreferredSize(new Dimension((int) screenSize.getWidth(), buttonPanelHeight));
 
+        testImageUrl = "src/main/java/fivefishes/design/patterns/group/assignment/resources/ChangEr/redblue.png";
+        try {
+            testImage = ImageIO.read(new File(testImageUrl));
+            staticTestImage = ImageIO.read(new File(staticTestImageUrl));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        testImage = testImage.getScaledInstance(-1, 100, Image. SCALE_SMOOTH);
+        staticTestImage = staticTestImage.getScaledInstance(-1, 150, Image.SCALE_SMOOTH);
+
         //Configure the frame
 //        getContentPane().setBackground(Color.white);
 //        getContentPane().add(panelContainer);
@@ -127,7 +142,12 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         super.paint(g);
 
         Graphics2D graphics2D = (Graphics2D) g.create();
-//        Perform drawing here using graphics2D.drawImage()
+        graphics2D.drawImage(staticTestImage, 500, 500, null);
+        // Set Clip to area containing components you wan to repaint
+        graphics2D.setClip(new Rectangle(100, 100, 100, 100));
+        // Perform drawing here using graphics2D.drawImage()
+        graphics2D.drawImage(testImage, 100, 100, null);
+
 
     } //paint
 
@@ -136,6 +156,13 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
 
         if (event.getSource() == lightButton) {
             lights = true;
+            testImageUrl = "src/main/java/fivefishes/design/patterns/group/assignment/resources/ChangEr/lightgreen.png";
+            try {
+                testImage = ImageIO.read(new File(testImageUrl));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            testImage = testImage.getScaledInstance(-1, 100, Image. SCALE_SMOOTH);
             repaint();
 
         }//if light
