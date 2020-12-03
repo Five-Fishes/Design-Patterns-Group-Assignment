@@ -9,7 +9,7 @@ public class History {
     private final int HISTORY_MAX_SIZE = 5;
 
     public void add(ChangErMemento changErMemento) {
-        if (history.size() > HISTORY_MAX_SIZE) {
+        if (history.size() >= HISTORY_MAX_SIZE) {
             history.remove(0);
         } else if (currentIndex < history.size()-1) {
             history.subList(currentIndex + 1, history.size()).clear();
