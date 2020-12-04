@@ -1,7 +1,7 @@
-package fivefishes.design.patterns.group.assignment.entities;
+package fivefishes.design.patterns.group.assignment.entities.observer;
 
-import fivefishes.design.patterns.group.assignment.interfaces.Subject;
-import fivefishes.design.patterns.group.assignment.interfaces.Observer;
+import fivefishes.design.patterns.group.assignment.interfaces.observer.Subject;
+import fivefishes.design.patterns.group.assignment.interfaces.observer.Observer;
 
 import java.util.ArrayList;
 import java.util.List;

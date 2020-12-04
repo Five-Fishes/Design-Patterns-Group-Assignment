@@ -1,4 +1,4 @@
-package fivefishes.design.patterns.group.assignment.interfaces;
+package fivefishes.design.patterns.group.assignment.interfaces.observer;
 
 public interface Subject {
 

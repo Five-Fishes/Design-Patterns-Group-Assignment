@@ -1,6 +1,6 @@
-package fivefishes.design.patterns.group.assignment.entities;
+package fivefishes.design.patterns.group.assignment.entities.observer;
 
-import fivefishes.design.patterns.group.assignment.interfaces.Observer;
+import fivefishes.design.patterns.group.assignment.interfaces.observer.Observer;
 
 import javax.sound.sampled.*;
 import java.io.File;

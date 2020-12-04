@@ -1,5 +1,10 @@
 package fivefishes.design.patterns.group.assignment;
 
+import fivefishes.design.patterns.group.assignment.entities.observer.AudioPlayerObserver;
+import fivefishes.design.patterns.group.assignment.entities.observer.ClockSubject;
+import fivefishes.design.patterns.group.assignment.interfaces.observer.Observer;
+import fivefishes.design.patterns.group.assignment.interfaces.observer.Subject;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -8,12 +13,15 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class MidAutumnSwing extends JFrame implements ActionListener {
 
     private Observer audioPlayerObserver = new AudioPlayerObserver();
     private Subject clockSubject = new ClockSubject();
-    private JLabel clockLabel = new JLabel("A song is played every 1 minute");
+    private JLabel clockLabel = new JLabel("A song will be played every 1 minute");
     ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
 
 
@@ -92,22 +100,9 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         //Setting colour of button panel
         buttonPanel.setBackground(Color.white);
 
-        //Button Label
-        // buttonLabel = new JLabel("Click on the button to add the item to the tree.");
-        buttonLabel = new JLabel("");
-        buttonLabel.setFont(new Font("CENTURY GOTHIC", Font.ITALIC, 16));
-        buttonLabel.setForeground(Color.red);
-        buttonLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        buttonLabel.setBackground(Color.white);
-
-        //Info panel
-        infoPanel = new JPanel();
-        infoPanel.add(buttonLabel);
-        infoPanel.setBackground(Color.white);
-
         clockSubject.register(audioPlayerObserver);
         Runnable runnable = () -> clockSubject.notifyObserver();
-        executorService.scheduleAtFixedRate(runnable, 0, 1, TimeUnit.MINUTES);
+        executorService.scheduleAtFixedRate(runnable, 1, 1, TimeUnit.MINUTES);
 
         //Naming buttons
         lightButton = new JButton("Lights");
@@ -142,15 +137,15 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         // set buttonPanel width and height
         buttonPanel.setPreferredSize(new Dimension((int) screenSize.getWidth(), buttonPanelHeight));
 
-        testImageUrl = "src/main/java/fivefishes/design/patterns/group/assignment/resources/ChangEr/redblue.png";
-        try {
-            testImage = ImageIO.read(new File(testImageUrl));
-            staticTestImage = ImageIO.read(new File(staticTestImageUrl));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        testImage = testImage.getScaledInstance(-1, 100, Image. SCALE_SMOOTH);
-        staticTestImage = staticTestImage.getScaledInstance(-1, 150, Image.SCALE_SMOOTH);
+//        testImageUrl = "src/main/java/fivefishes/design/patterns/group/assignment/resources/ChangEr/redblue.png";
+//        try {
+//            testImage = ImageIO.read(new File(testImageUrl));
+//            staticTestImage = ImageIO.read(new File(staticTestImageUrl));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        testImage = testImage.getScaledInstance(-1, 100, Image. SCALE_SMOOTH);
+//        staticTestImage = staticTestImage.getScaledInstance(-1, 150, Image.SCALE_SMOOTH);
 
         //Configure the frame
 //        getContentPane().setBackground(Color.white);
