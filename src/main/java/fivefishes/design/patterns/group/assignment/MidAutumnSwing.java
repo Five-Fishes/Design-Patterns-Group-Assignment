@@ -1,7 +1,7 @@
 package fivefishes.design.patterns.group.assignment;
 
-import fivefishes.design.patterns.group.assignment.entities.ChangErFashion;
-import fivefishes.design.patterns.group.assignment.entities.History;
+import fivefishes.design.patterns.group.assignment.entities.Memento.ChangErFashion;
+import fivefishes.design.patterns.group.assignment.entities.Memento.History;
 import fivefishes.design.patterns.group.assignment.entities.enumeration.Fashion;
 
 import javax.imageio.ImageIO;

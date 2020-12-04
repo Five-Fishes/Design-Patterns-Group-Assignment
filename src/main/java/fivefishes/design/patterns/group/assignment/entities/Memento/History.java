@@ -1,4 +1,4 @@
-package fivefishes.design.patterns.group.assignment.entities;
+package fivefishes.design.patterns.group.assignment.entities.Memento;
 
 import java.util.ArrayList;
 import java.util.List;
