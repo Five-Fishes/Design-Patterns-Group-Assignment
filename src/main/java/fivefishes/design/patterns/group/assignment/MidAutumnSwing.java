@@ -2,6 +2,8 @@ package fivefishes.design.patterns.group.assignment;
 
 import fivefishes.design.patterns.group.assignment.entities.observer.AudioPlayerObserver;
 import fivefishes.design.patterns.group.assignment.entities.observer.ClockSubject;
+import fivefishes.design.patterns.group.assignment.entities.observer.RabbitImage;
+import fivefishes.design.patterns.group.assignment.entities.observer.SubjectWorker;
 import fivefishes.design.patterns.group.assignment.interfaces.observer.Observer;
 import fivefishes.design.patterns.group.assignment.interfaces.observer.Subject;
 
@@ -20,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 public class MidAutumnSwing extends JFrame implements ActionListener {
 
     private Observer audioPlayerObserver = new AudioPlayerObserver();
-    private Subject clockSubject = new ClockSubject();
+    private ClockSubject clockSubject = new ClockSubject();
     private JLabel clockLabel = new JLabel("A song will be played every 1 minute");
     ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
 
@@ -49,10 +51,7 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
     private int imageStartYaxis;
     private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-    private String testImageUrl;
-    private Image testImage;
-    private String staticTestImageUrl = "src/main/java/fivefishes/design/patterns/group/assignment/resources/ChangEr/redblue.png";
-    private Image staticTestImage;
+    private Image dancingRabbitImg, singingRabbitImg;
 
     public MidAutumnSwing() {
         //Set title
@@ -101,8 +100,8 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         buttonPanel.setBackground(Color.white);
 
         clockSubject.register(audioPlayerObserver);
-        Runnable runnable = () -> clockSubject.notifyObserver();
-        executorService.scheduleAtFixedRate(runnable, 1, 1, TimeUnit.MINUTES);
+        SubjectWorker subjectWorker = new SubjectWorker(clockSubject, this);
+        executorService.scheduleAtFixedRate(subjectWorker, 1, 1, TimeUnit.MINUTES);
 
         //Naming buttons
         lightButton = new JButton("Lights");
@@ -137,15 +136,14 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         // set buttonPanel width and height
         buttonPanel.setPreferredSize(new Dimension((int) screenSize.getWidth(), buttonPanelHeight));
 
-//        testImageUrl = "src/main/java/fivefishes/design/patterns/group/assignment/resources/ChangEr/redblue.png";
-//        try {
-//            testImage = ImageIO.read(new File(testImageUrl));
-//            staticTestImage = ImageIO.read(new File(staticTestImageUrl));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        testImage = testImage.getScaledInstance(-1, 100, Image. SCALE_SMOOTH);
-//        staticTestImage = staticTestImage.getScaledInstance(-1, 150, Image.SCALE_SMOOTH);
+        try {
+            dancingRabbitImg = ImageIO.read(new File(RabbitImage.Dancing.getImageUrl()));
+            singingRabbitImg = ImageIO.read(new File(RabbitImage.Singing.getImageUrl()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        dancingRabbitImg = dancingRabbitImg.getScaledInstance(-1, 100, Image. SCALE_SMOOTH);
+        singingRabbitImg = singingRabbitImg.getScaledInstance(-1, 100, Image. SCALE_SMOOTH);
 
         //Configure the frame
 //        getContentPane().setBackground(Color.white);
@@ -162,23 +160,17 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         super.paint(g);
 
         // Perform drawing here using g.drawImage()
-        g.drawImage(testImage, 100, 100, null);
-        g.drawImage(staticTestImage, 500, 500, null);
+        if (clockSubject.isActive()) {
+            g.drawImage(dancingRabbitImg, 800, 500, null);
+            g.drawImage(singingRabbitImg, 1100, 500, null);
+        }
+
     } //paint
 
     //Coding the event-handling routine
     public void actionPerformed(ActionEvent event) {
 
         if (event.getSource() == lightButton) {
-            lights = true;
-            testImageUrl = "src/main/java/fivefishes/design/patterns/group/assignment/resources/ChangEr/lightgreen.png";
-            try {
-                testImage = ImageIO.read(new File(testImageUrl));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            testImage = testImage.getScaledInstance(-1, 100, Image. SCALE_SMOOTH);
-            repaint();
 
         }//if light
 

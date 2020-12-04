@@ -9,6 +9,7 @@ import java.util.List;
 public class ClockSubject implements Subject {
 
     private List<Observer> observers = new ArrayList<>();
+    private boolean active = false;
 
     @Override
     public void register(Observer observer) {
@@ -23,5 +24,13 @@ public class ClockSubject implements Subject {
     @Override
     public void notifyObserver() {
         observers.forEach(Observer::update);
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }
