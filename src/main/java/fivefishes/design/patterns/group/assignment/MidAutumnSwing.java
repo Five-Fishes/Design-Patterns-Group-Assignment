@@ -1,5 +1,6 @@
 package fivefishes.design.patterns.group.assignment;
 
+import fivefishes.design.patterns.group.assignment.components.observer.RabbitGifLabel;
 import fivefishes.design.patterns.group.assignment.entities.observer.*;
 import fivefishes.design.patterns.group.assignment.interfaces.observer.Observer;
 import fivefishes.design.patterns.group.assignment.interfaces.observer.Subject;
@@ -19,8 +20,10 @@ import java.util.concurrent.TimeUnit;
 
 public class MidAutumnSwing extends JFrame implements ActionListener {
 
+    private RabbitGifLabel dancingRabbitLabel= new RabbitGifLabel(RabbitImage.Dancing);
+    private RabbitGifLabel singingRabbitLabel= new RabbitGifLabel(RabbitImage.Singing);
     private Observer audioPlayerObserver = new AudioPlayerObserver();
-    private RabbitObserver rabbitObserver = new RabbitObserver(this);
+    private RabbitObserver rabbitObserver = new RabbitObserver(dancingRabbitLabel,singingRabbitLabel);
     private ClockSubject clockSubject = new ClockSubject(
             new HashSet<Observer>() {{
                 add(audioPlayerObserver);
@@ -59,7 +62,6 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
     private int imageStartYaxis;
     private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-    private Image dancingRabbitImg, singingRabbitImg;
 
     public MidAutumnSwing() {
         //Set title
@@ -145,14 +147,10 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         // set buttonPanel width and height
         buttonPanel.setPreferredSize(new Dimension((int) screenSize.getWidth(), buttonPanelHeight));
 
-        try {
-            dancingRabbitImg = ImageIO.read(new File(RabbitImage.Dancing.getImageUrl()));
-            singingRabbitImg = ImageIO.read(new File(RabbitImage.Singing.getImageUrl()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        dancingRabbitImg = dancingRabbitImg.getScaledInstance(-1, 100, Image.SCALE_SMOOTH);
-        singingRabbitImg = singingRabbitImg.getScaledInstance(-1, 100, Image.SCALE_SMOOTH);
+        dancingRabbitLabel.setBounds(800, 500, 500, 178);
+        singingRabbitLabel.setBounds(1100, 500, 500, 178);
+        backgroundImageLabel.add(dancingRabbitLabel);
+        backgroundImageLabel.add(singingRabbitLabel);
 
         //Configure the frame
 //        getContentPane().setBackground(Color.white);
@@ -169,10 +167,6 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         super.paint(g);
 
         // Perform drawing here using g.drawImage()
-        if (rabbitObserver.isShowRabbit()) {
-            g.drawImage(dancingRabbitImg, 800, 500, null);
-            g.drawImage(singingRabbitImg, 1100, 500, null);
-        }
 
     } //paint
 
