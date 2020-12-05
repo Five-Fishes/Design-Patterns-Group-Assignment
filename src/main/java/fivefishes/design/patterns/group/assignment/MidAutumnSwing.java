@@ -1,9 +1,13 @@
 package fivefishes.design.patterns.group.assignment;
 
+import fivefishes.design.patterns.group.assignment.components.observer.ObserverCheckBox;
 import fivefishes.design.patterns.group.assignment.components.observer.RabbitGifLabel;
+import fivefishes.design.patterns.group.assignment.components.observer.TimerLabel;
 import fivefishes.design.patterns.group.assignment.entities.observer.*;
+import fivefishes.design.patterns.group.assignment.enums.observer.RabbitImage;
 import fivefishes.design.patterns.group.assignment.interfaces.observer.Observer;
-import fivefishes.design.patterns.group.assignment.interfaces.observer.Subject;
+import fivefishes.design.patterns.group.assignment.worker.observer.SubjectWorker;
+import fivefishes.design.patterns.group.assignment.worker.observer.TimerWorker;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

@@ -1,6 +1,6 @@
 package fivefishes.design.patterns.group.assignment.components.observer;
 
-import fivefishes.design.patterns.group.assignment.entities.observer.RabbitImage;
+import fivefishes.design.patterns.group.assignment.enums.observer.RabbitImage;
 
 import javax.swing.*;
 import java.awt.*;

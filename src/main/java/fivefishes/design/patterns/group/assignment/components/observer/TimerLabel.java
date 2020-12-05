@@ -1,4 +1,4 @@
-package fivefishes.design.patterns.group.assignment.entities.observer;
+package fivefishes.design.patterns.group.assignment.components.observer;
 
 import javax.swing.*;
 

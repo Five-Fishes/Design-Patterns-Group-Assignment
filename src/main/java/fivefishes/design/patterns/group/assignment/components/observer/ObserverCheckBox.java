@@ -1,5 +1,6 @@
-package fivefishes.design.patterns.group.assignment.entities.observer;
+package fivefishes.design.patterns.group.assignment.components.observer;
 
+import fivefishes.design.patterns.group.assignment.entities.observer.RabbitObserver;
 import fivefishes.design.patterns.group.assignment.interfaces.observer.Observer;
 import fivefishes.design.patterns.group.assignment.interfaces.observer.Subject;
 
@@ -28,7 +29,7 @@ public class ObserverCheckBox extends JCheckBox {
     }
 
     public String getObserverName() {
-        if (observer instanceof  RabbitObserver) {
+        if (observer instanceof RabbitObserver) {
             return "RabbitObserver";
         } else {
             return "AudioPlayerObserver";

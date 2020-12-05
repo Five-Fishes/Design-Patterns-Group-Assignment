@@ -1,5 +1,6 @@
-package fivefishes.design.patterns.group.assignment.entities.observer;
+package fivefishes.design.patterns.group.assignment.worker.observer;
 
+import fivefishes.design.patterns.group.assignment.entities.observer.ClockSubject;
 import fivefishes.design.patterns.group.assignment.interfaces.observer.Subject;
 
 import javax.swing.*;
