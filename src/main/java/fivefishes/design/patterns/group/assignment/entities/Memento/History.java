@@ -15,7 +15,7 @@ public class History {
             history.subList(currentIndex + 1, history.size()).clear();
         }
         this.history.add(changErMemento);
-        currentIndex++;
+        currentIndex = history.indexOf(changErMemento);
     }
 
     public ChangErMemento undo() {
