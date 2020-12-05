@@ -1,4 +1,4 @@
-package fivefishes.design.patterns.group.assignment.factorymethod;
+package fivefishes.design.patterns.group.assignment.factorymethod.ingredient.mooncakeImage;
 
 import javax.imageio.ImageIO;
 import java.io.File;

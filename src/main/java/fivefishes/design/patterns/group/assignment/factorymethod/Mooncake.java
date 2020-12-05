@@ -1,5 +1,13 @@
 package fivefishes.design.patterns.group.assignment.factorymethod;
 
+import fivefishes.design.patterns.group.assignment.factorymethod.ingredient.dough.Dough;
+import fivefishes.design.patterns.group.assignment.factorymethod.ingredient.fillings.Fillings;
+import fivefishes.design.patterns.group.assignment.factorymethod.ingredient.mooncakeImage.MooncakeImage;
+import fivefishes.design.patterns.group.assignment.factorymethod.ingredient.paste.GreenTeaPaste;
+import fivefishes.design.patterns.group.assignment.factorymethod.ingredient.paste.LotusSeedPaste;
+import fivefishes.design.patterns.group.assignment.factorymethod.ingredient.paste.RedBeanPaste;
+import fivefishes.design.patterns.group.assignment.factorymethod.ingredient.shape.Shape;
+
 import java.awt.image.BufferedImage;
 
 public abstract class Mooncake {
@@ -11,7 +19,7 @@ public abstract class Mooncake {
     RedBeanPaste redBeanPaste;
     LotusSeedPaste lotusSeedPaste;
     GreenTeaPaste greenTeaPaste;
-    Yolk yolk;
+    Fillings yolk;
 
     public abstract void prepare();
 
@@ -51,7 +59,7 @@ public abstract class Mooncake {
         return greenTeaPaste;
     }
 
-    public Yolk getYolk() {
+    public Fillings getYolk() {
         return yolk;
     }
 }

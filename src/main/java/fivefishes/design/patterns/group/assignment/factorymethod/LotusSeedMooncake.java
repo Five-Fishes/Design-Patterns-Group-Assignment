@@ -1,5 +1,7 @@
 package fivefishes.design.patterns.group.assignment.factorymethod;
 
+import fivefishes.design.patterns.group.assignment.factorymethod.factory.MooncakeFactory;
+
 public class LotusSeedMooncake extends Mooncake {
     private MooncakeFactory mooncakeFactory;
 
@@ -13,7 +15,7 @@ public class LotusSeedMooncake extends Mooncake {
         this.shape = mooncakeFactory.createShape();
         this.dough = mooncakeFactory.createDough();
         this.lotusSeedPaste = mooncakeFactory.createLotusSeedPaste();
-        this.yolk = mooncakeFactory.createYolk();
+        this.yolk = mooncakeFactory.createFillings();
     }
 
 

@@ -1,6 +1,7 @@
 package fivefishes.design.patterns.group.assignment.factorymethod;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 import static java.awt.Font.*;
@@ -18,15 +19,17 @@ public class MooncakeDescriptionPanel extends JPanel {
         add(titleLabel);
         add(Box.createRigidArea(new Dimension(0,10)));
         add(nameLabel);
-        add(Box.createRigidArea(new Dimension(0,10)));
+        add(Box.createRigidArea(new Dimension(0,5)));
         add(shapeLabel);
-        add(Box.createRigidArea(new Dimension(0,10)));
+        add(Box.createRigidArea(new Dimension(0,5)));
         add(doughLabel);
-        add(Box.createRigidArea(new Dimension(0,10)));
+        add(Box.createRigidArea(new Dimension(0,5)));
         add(pasteLabel);
-        add(Box.createRigidArea(new Dimension(0,10)));
+        add(Box.createRigidArea(new Dimension(0,5)));
         add(yolkLabel );
         setFonts();
+        setBackground(new Color(255, 228, 179));
+        setBorder(new EmptyBorder(20, 20, 20, 20));
     }
 
     public void setLabel(Mooncake mooncake){
@@ -43,11 +46,11 @@ public class MooncakeDescriptionPanel extends JPanel {
     }
 
     public void setFonts(){
-        titleLabel.setFont(new Font(SANS_SERIF, BOLD, 28));
-        nameLabel.setFont(new Font(SANS_SERIF, PLAIN, 24));
-        shapeLabel.setFont(new Font(SANS_SERIF, PLAIN, 24));
-        pasteLabel.setFont(new Font(SANS_SERIF, PLAIN, 24));
-        doughLabel.setFont(new Font(SANS_SERIF, PLAIN, 24));
-        yolkLabel.setFont(new Font(SANS_SERIF, PLAIN, 24));
+        titleLabel.setFont(new Font(SANS_SERIF, BOLD, 22));
+        nameLabel.setFont(new Font(SANS_SERIF, PLAIN, 18));
+        shapeLabel.setFont(new Font(SANS_SERIF, PLAIN, 18));
+        pasteLabel.setFont(new Font(SANS_SERIF, PLAIN, 18));
+        doughLabel.setFont(new Font(SANS_SERIF, PLAIN, 18));
+        yolkLabel.setFont(new Font(SANS_SERIF, PLAIN, 18));
     }
 }

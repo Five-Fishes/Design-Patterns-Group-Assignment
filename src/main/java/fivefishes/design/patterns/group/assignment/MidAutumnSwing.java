@@ -1,11 +1,10 @@
 package fivefishes.design.patterns.group.assignment;
 
 import fivefishes.design.patterns.group.assignment.factorymethod.*;
-import sun.security.krb5.internal.crypto.Des;
+import fivefishes.design.patterns.group.assignment.factorymethod.factory.MooncakeFactory;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.*;
@@ -14,7 +13,6 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class MidAutumnSwing extends JFrame implements ActionListener {
     //Buttons
@@ -22,7 +20,7 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
     private JButton exitButton;
 
     //Panels
-    private JPanel titlePanel, backgroundImagePanel, buttonPanel,primaryButtonPanel, secondaryButtonPanel;
+    private JPanel titlePanel, backgroundImagePanel, buttonPanel;
 
     //Labels
     private JLabel title, backgroundImageLabel;
@@ -36,6 +34,7 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
     private int imageHeight;
     private Image resizedImage;
 
+
     private final int buttonPanelHeight = 150;
     private int imageStartXaxis;
     private int imageStartYaxis;
@@ -46,15 +45,20 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
     private Mooncake mooncake;
     private ImageIcon mooncakeImage = new ImageIcon();
     private JLabel mooncakeLabel = new JLabel();
-    private ArrayList<JButton> mooncakeTypBtnList = new ArrayList<JButton>();
-    private ArrayList<JButton> mooncakeFlavorBtnList = new ArrayList<JButton>();
-    private BufferedImage table;
-    private int tableImageXaxis;
-    private int tableImageYaxis;
-    private int mooncakeImageXaxis;
-    private int mooncakeImageYaxis;
+    private BufferedImage tableImage;
+    private Image resizedTableImage;
+    private JLabel tableLabel;
+    private String mooncakeStyle;
+
+//    private MooncakeStyle[] mooncakeStyles = MooncakeStyle.values();
+    private JComboBox mooncakeStyleCombo = new JComboBox();
+
+
+    private String[] mooncakeFlavorList = {"Lotus Seed","Red Bean"};
+    private JComboBox<String> mooncakeFlavorCombo = new JComboBox<>(mooncakeFlavorList);
     private MooncakeDescriptionPanel descriptionPanel= new MooncakeDescriptionPanel();
 
+    //Test Image
     private String testImageUrl;
     private Image testImage;
     private String staticTestImageUrl = "src/main/java/fivefishes/design/patterns/group/assignment/resources/ChangEr/redblue.png";
@@ -89,6 +93,7 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         //Retrieving image from the file
         try {
             image = ImageIO.read(new File("src/main/java/fivefishes/design/patterns/group/assignment/resources/background.jpg"));
+            tableImage = ImageIO.read(new File("src/main/java/fivefishes/design/patterns/group/assignment/resources/table.png"));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -96,14 +101,11 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         backgroundImageConfiguration();
         //Adding the image to a label
         backgroundImageLabel = new JLabel(new ImageIcon(resizedImage));
-
         backgroundImagePanel.add(backgroundImageLabel);
         backgroundImagePanel.setBackground(Color.white);
 
         //Creating a new JPanel for the buttons to go
         buttonPanel = new JPanel();
-        primaryButtonPanel = new JPanel();
-        secondaryButtonPanel = new JPanel();
 
         //Setting colour of button panel
         buttonPanel.setBackground(Color.white);
@@ -127,77 +129,52 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         //Enable buttons to listen for a mouse-click
         lightButton.addActionListener(this);
         exitButton.addActionListener(this);
+        mooncakeStyleCombo.addActionListener(this);
+        mooncakeFlavorCombo.addActionListener(this);
+        mooncakeFlavorCombo.setVisible(false);
+
 
         //Positioning Panels
         add(titlePanel, BorderLayout.NORTH);
         add(backgroundImagePanel, BorderLayout.CENTER);
-//        backgroundImagePanel.setLayout(null);
+        backgroundImageLabel.setLayout(null);
         add(buttonPanel, BorderLayout.SOUTH);
-        buttonPanel.setLayout(new BorderLayout());
-        buttonPanel.add(primaryButtonPanel, BorderLayout.NORTH);
-        buttonPanel.add(secondaryButtonPanel, BorderLayout.CENTER);
 
         // set buttonPanel width and height
         buttonPanel.setPreferredSize(new Dimension((int) screenSize.getWidth(), buttonPanelHeight));
 
         //Abstract Factory Mooncake
-        try {
-            table = ImageIO.read(new File("src/main/java/fivefishes/design/patterns/group/assignment/resources/table.png"));
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        tableImageXaxis = (int) screenSize.getWidth() - 800;
-        tableImageYaxis = 550;
-        mooncakeImageXaxis = (int) screenSize.getWidth() - 770;
-        mooncakeImageYaxis = 450;
-        mooncakeLabel.setBounds(mooncakeImageXaxis, mooncakeImageYaxis, 311, 80);
-        descriptionPanel.setBounds(500,200, 500, 500);
+        mooncakeLabel.setBounds(1155, 570, 207, 53);
+        descriptionPanel.setBounds(800,300, 400, 300);
         descriptionPanel.setLayout(new BoxLayout(descriptionPanel,  BoxLayout.Y_AXIS));
-        backgroundImagePanel.add(mooncakeLabel);
-//        backgroundImagePanel.add(descriptionPanel);
-//        descriptionPanel.setVisible(false);
+        backgroundImageLabel.add(mooncakeLabel);
+        backgroundImageLabel.add(descriptionPanel);
+        descriptionPanel.setVisible(false);
         mooncakeLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (!descriptionPanel.isShowing()){
-//                    descriptionPanel.setVisible(false);
-                    backgroundImagePanel.add(descriptionPanel);
+                if (descriptionPanel.isShowing()){
+                    descriptionPanel.setVisible(false);
                 } else {
-//                    descriptionPanel.setVisible(true);
-                    backgroundImagePanel.remove(descriptionPanel);
+                    descriptionPanel.setVisible(true);
                 }
-                backgroundImagePanel.revalidate();
-                backgroundImagePanel.repaint();
             }
         });
-
-        //Abstract Factory Mooncake TYPE Button
-        mooncakeTypBtnList.add(new JButton("Cantonese Style"));
-        mooncakeTypBtnList.add(new JButton("Shanghai Style"));
-        mooncakeTypBtnList.add(new JButton("Kluang Style"));
-        for(JButton button: mooncakeTypBtnList){
-            button.setFont(new Font("CENTURY GOTHIC", Font.ITALIC, 16));
-            button.setBackground(Color.red);
-            button.setForeground(Color.white);
-            button.addActionListener(this);
-            primaryButtonPanel.add(button);
+        for(MooncakeStyle mooncakeStyle: MooncakeStyle.values()) {
+            mooncakeStyleCombo.addItem(mooncakeStyle);
         }
 
-        //Abstract Factory Mooncake Flavor Button
-        mooncakeFlavorBtnList.add(new JButton("Lotus Seed"));
-        mooncakeFlavorBtnList.add(new JButton("Red Bean"));
-        for(JButton button: mooncakeFlavorBtnList){
-            button.setFont(new Font("CENTURY GOTHIC", Font.ITALIC, 16));
-            button.setBackground(Color.red);
-            button.setForeground(Color.white);
-            button.addActionListener(this);
-            secondaryButtonPanel.add(button);
-            button.setVisible(false);
-        }
+        //Table Image
+        resizedTableImage = tableImage.getScaledInstance(260, 178, Image.SCALE_SMOOTH);
+        tableLabel = new JLabel(new ImageIcon(resizedTableImage));
+        tableLabel.setBounds( 1120, 600, 260, 178);
+        backgroundImageLabel.add(tableLabel);
 
         //Add the buttons to the buttonPanel
-        primaryButtonPanel.add(lightButton);
-        primaryButtonPanel.add(exitButton);
+        buttonPanel.add(mooncakeStyleCombo);
+        buttonPanel.add(mooncakeFlavorCombo);
+        buttonPanel.add(lightButton);
+        buttonPanel.add(exitButton);
 
         //Test Image
 //        testImageUrl = "src/main/java/fivefishes/design/patterns/group/assignment/resources/ChangEr/redblue.png";
@@ -228,12 +205,12 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         // Perform drawing here using g.drawImage()
 //        g.drawImage(testImage, 100, 100, null);
 //        g.drawImage(staticTestImage, 500, 500, null);
-        g.drawImage(table, tableImageXaxis, tableImageYaxis, this);
+
 
     } //paint
 
     public Image resizeMooncakeImage(BufferedImage mooncakeBufferedImage) {
-        return mooncakeBufferedImage.getScaledInstance(311,80,Image.SCALE_SMOOTH);
+        return mooncakeBufferedImage.getScaledInstance(207,53,Image.SCALE_SMOOTH);
     }
 
     public void createMooncake(Mooncake mooncake) {
@@ -243,42 +220,28 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         descriptionPanel.setLabel(mooncake);
         repaint();
     }
+
     //Coding the event-handling routine
     public void actionPerformed(ActionEvent event) {
-        if (event.getSource() == mooncakeTypBtnList.get(0)) {
-            mooncakeTypBtnList.get(0).setBackground(new Color(168,50,50));
-            mooncakeTypBtnList.get(1).setBackground(Color.red);
-            mooncakeTypBtnList.get(2).setBackground(Color.red);
-            mooncakeFactory = new CantoneseMooncakeFactory();
-            for(JButton button: mooncakeFlavorBtnList){
-                button.setVisible(true);
+        if (event.getSource() == mooncakeStyleCombo) {
+            MooncakeStyle selectedStyle = (MooncakeStyle) mooncakeStyleCombo.getSelectedItem();
+            mooncakeStyle =  selectedStyle.name();
+            mooncakeFactory = selectedStyle.getMooncakeFactory();
+            mooncakeFlavorCombo.setVisible(true);
+        } else if (event.getSource() == mooncakeFlavorCombo) {
+            if(mooncakeFlavorCombo.getSelectedItem().equals("Lotus Seed")) {
+                mooncake = new LotusSeedMooncake(mooncakeFactory);
+                mooncake.setName(mooncakeStyle + " Lotus Seed Mooncake");
+                createMooncake(mooncake);
             }
-        } else if (event.getSource() == mooncakeTypBtnList.get(1)){
-            mooncakeTypBtnList.get(0).setBackground(Color.red);
-            mooncakeTypBtnList.get(1).setBackground(new Color(168,50,50));
-            mooncakeTypBtnList.get(2).setBackground(Color.red);
-            mooncakeFactory = new ShanghaiMooncakeFactory();
-            for(JButton button: mooncakeFlavorBtnList){
-                button.setVisible(true);
+            if(mooncakeFlavorCombo.getSelectedItem().equals("Red Bean")) {
+                mooncake = new RedBeanMooncake(mooncakeFactory);
+                mooncake.setName(mooncakeStyle + " Red Bean Mooncake");
+                createMooncake(mooncake);
             }
-        } else if (event.getSource() == mooncakeTypBtnList.get(2)){
-            mooncakeTypBtnList.get(0).setBackground(Color.red);
-            mooncakeTypBtnList.get(1).setBackground(Color.red);
-            mooncakeTypBtnList.get(2).setBackground(new Color(168,50,50));
-            mooncakeFactory = new KluangMooncakeFactory();
-            for(JButton button: mooncakeFlavorBtnList){
-                button.setVisible(true);
-            }
-        } else if (event.getSource() == mooncakeFlavorBtnList.get(0)){
-            mooncake = new LotusSeedMooncake(mooncakeFactory);
-            createMooncake(mooncake);
-
-        } else if (event.getSource() == mooncakeFlavorBtnList.get(1)){
-            mooncake = new RedBeanMooncake(mooncakeFactory);
-            createMooncake(mooncake);
         } else {
             System.exit(0);
-        }//else exit
+        }
 
     } //actionPerformed
 
@@ -289,5 +252,4 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         imageStartXaxis = (int) (screenSize.getWidth() - resizedImage.getWidth(null)) / 2;
         imageStartYaxis = 10;
     }
-
 }//class
