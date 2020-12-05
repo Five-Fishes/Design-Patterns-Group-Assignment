@@ -1,9 +1,6 @@
 package fivefishes.design.patterns.group.assignment;
 
-import fivefishes.design.patterns.group.assignment.entities.observer.AudioPlayerObserver;
-import fivefishes.design.patterns.group.assignment.entities.observer.ClockSubject;
-import fivefishes.design.patterns.group.assignment.entities.observer.RabbitImage;
-import fivefishes.design.patterns.group.assignment.entities.observer.SubjectWorker;
+import fivefishes.design.patterns.group.assignment.entities.observer.*;
 import fivefishes.design.patterns.group.assignment.interfaces.observer.Observer;
 import fivefishes.design.patterns.group.assignment.interfaces.observer.Subject;
 
@@ -15,6 +12,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -22,7 +20,13 @@ import java.util.concurrent.TimeUnit;
 public class MidAutumnSwing extends JFrame implements ActionListener {
 
     private Observer audioPlayerObserver = new AudioPlayerObserver();
-    private ClockSubject clockSubject = new ClockSubject();
+    private RabbitObserver rabbitObserver = new RabbitObserver(this);
+    private ClockSubject clockSubject = new ClockSubject(
+            new HashSet<Observer>() {{
+                add(audioPlayerObserver);
+                add(rabbitObserver);
+            }}
+    );
     private JLabel clockLabel = new JLabel("A song will be played every 1 minute");
     ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
 
@@ -99,9 +103,8 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         //Setting colour of button panel
         buttonPanel.setBackground(Color.white);
 
-        clockSubject.register(audioPlayerObserver);
-        SubjectWorker subjectWorker = new SubjectWorker(clockSubject, this);
-        executorService.scheduleAtFixedRate(subjectWorker, 1, 1, TimeUnit.MINUTES);
+        SubjectWorker subjectWorker = new SubjectWorker(clockSubject);
+        executorService.scheduleAtFixedRate(subjectWorker, 0, 1, TimeUnit.MINUTES);
 
         //Naming buttons
         lightButton = new JButton("Lights");
@@ -142,8 +145,8 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        dancingRabbitImg = dancingRabbitImg.getScaledInstance(-1, 100, Image. SCALE_SMOOTH);
-        singingRabbitImg = singingRabbitImg.getScaledInstance(-1, 100, Image. SCALE_SMOOTH);
+        dancingRabbitImg = dancingRabbitImg.getScaledInstance(-1, 100, Image.SCALE_SMOOTH);
+        singingRabbitImg = singingRabbitImg.getScaledInstance(-1, 100, Image.SCALE_SMOOTH);
 
         //Configure the frame
 //        getContentPane().setBackground(Color.white);
@@ -160,7 +163,7 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         super.paint(g);
 
         // Perform drawing here using g.drawImage()
-        if (clockSubject.isActive()) {
+        if (rabbitObserver.isShowRabbit()) {
             g.drawImage(dancingRabbitImg, 800, 500, null);
             g.drawImage(singingRabbitImg, 1100, 500, null);
         }
@@ -183,7 +186,7 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
 
     private void backgroundImageConfiguration() {
         imageHeight = (int) (screenSize.getHeight() - buttonPanelHeight - 20);
-        resizedImage = image.getScaledInstance(-1, imageHeight, Image. SCALE_SMOOTH);
+        resizedImage = image.getScaledInstance(-1, imageHeight, Image.SCALE_SMOOTH);
 
         imageStartXaxis = (int) (screenSize.getWidth() - resizedImage.getWidth(null)) / 2;
         imageStartYaxis = 10;

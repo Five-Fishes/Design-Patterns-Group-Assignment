@@ -3,13 +3,16 @@ package fivefishes.design.patterns.group.assignment.entities.observer;
 import fivefishes.design.patterns.group.assignment.interfaces.observer.Subject;
 import fivefishes.design.patterns.group.assignment.interfaces.observer.Observer;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ClockSubject implements Subject {
 
-    private List<Observer> observers = new ArrayList<>();
-    private boolean active = false;
+    private Set<Observer> observers = new HashSet<>();
+
+    public ClockSubject(Set<Observer> observers) {
+        this.observers = observers;
+    }
 
     @Override
     public void register(Observer observer) {
@@ -23,14 +26,6 @@ public class ClockSubject implements Subject {
 
     @Override
     public void notifyObserver() {
-        observers.forEach(Observer::update);
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
+        observers.forEach(observer -> observer.update(this));
     }
 }
