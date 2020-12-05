@@ -3,7 +3,13 @@ package fivefishes.design.patterns.group.assignment;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import java.awt.Component;
+
+import controllers.houseController;
+import fivefishes.design.patterns.group.assignment.entities.background;
 import fivefishes.design.patterns.group.assignment.entities.house;
+import fivefishes.design.patterns.group.assignment.entities.houseBase;
+import fivefishes.design.patterns.group.assignment.entities.image;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,7 +24,8 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
     private JButton exitButton;
 
     //Panels
-    private JPanel titlePanel, imagePanel, buttonPanel, infoPanel;
+    private JPanel titlePanel, buttonPanel, infoPanel;
+    private JLayeredPane middlePanel;
 
     //Labels
     private JLabel title, imageLabel, buttonLabel;
@@ -58,7 +65,28 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         titlePanel.setBackground(Color.white);
 
         //Creating a new JPanel for the image to go
-        imagePanel = new JPanel();
+        middlePanel = new background();
+        
+        house defaultHouse = new house();
+        houseBase house_base = new houseBase();
+
+        JLabel defaultJLabel = defaultHouse.getImages().get(0);
+        defaultJLabel.setBounds(0,0,300,300);
+        house_base.add(defaultJLabel,JLayeredPane.DEFAULT_LAYER);
+
+        image tempimage = new image();
+        int imageHeight = (int) (screenSize.getHeight() - buttonPanelHeight - 20);
+        int imageWidth = (int) screenSize.getWidth();
+        
+        house_base.setBounds(200, 250, 300, 300);
+        tempimage.setBounds(0, 0, imageWidth, imageHeight);
+        
+        middlePanel.add(tempimage, JLayeredPane.DEFAULT_LAYER);
+        middlePanel.add(house_base, JLayeredPane.PALETTE_LAYER);
+
+        // pass reference of this frame and the area to update to houseController
+        houseController house_controller = new houseController(this, house_base.getBounds(), house_base);
+        house_controller.house = defaultHouse;
 
         //Retrieving image from the file
         try {
@@ -77,10 +105,11 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
 //        imagePanel.add(imageLabel);
 
         //Setting colour of image panel
-        imagePanel.setBackground(Color.white);
+        middlePanel.setBackground(Color.white);
 
         //Creating a new JPanel for the buttons to go
         buttonPanel = new JPanel();
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
 
         //Setting colour of button panel
         buttonPanel.setBackground(Color.white);
@@ -101,33 +130,102 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         //Naming buttons
         lightButton = new JButton("Lights");
         exitButton = new JButton("Exit");
+        JButton ApplyDecorationButton = new JButton("Apply Decorations");
+        JButton ClearDecorationButton = new JButton("Clear Decorations");
 
         //Setting colour of buttons
         lightButton.setBackground(Color.red);
         exitButton.setBackground(Color.red);
+        ApplyDecorationButton.setBackground(new Color(51,153,255));
+        ClearDecorationButton.setBackground(new Color(51,153,255));
 
         //Setting font on buttons
         lightButton.setFont(new Font("CENTURY GOTHIC", Font.ITALIC, 16));
         exitButton.setFont(new Font("CENTURY GOTHIC", Font.ITALIC, 16));
+        ApplyDecorationButton.setFont(new Font("CENTURY GOTHIC", Font.ITALIC, 16));
+        ClearDecorationButton.setFont(new Font("CENTURY GOTHIC", Font.ITALIC, 16));
 
         //Setting font colour on buttons
         lightButton.setForeground(Color.white);
         exitButton.setForeground(Color.white);
+        ApplyDecorationButton.setForeground(Color.white);
+        ClearDecorationButton.setForeground(Color.white);
+
+        // Setup Combobox
+        String[] decoratorOptions = {"lantern decorator", "firework decorator", "candles decorator", "flags decorator"};
+        JComboBox decoratorCombobox = new JComboBox(decoratorOptions);
+        decoratorCombobox.setSelectedIndex(0);
+        decoratorCombobox.setMaximumSize(new Dimension(300,30));
+        decoratorCombobox.addActionListener(new ActionListener(){
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JComboBox cb = (JComboBox)e.getSource();
+                String decoratorName = (String)cb.getSelectedItem();
+                house_controller.onDecorationSelected(decoratorName.replace(" ", ""));
+            }
+
+        });
+
+        //Create a group of components for Decorator DP
+        JPanel decoratorControlJPanel = new JPanel();
+        decoratorControlJPanel.setLayout(new BoxLayout(decoratorControlJPanel, BoxLayout.Y_AXIS));
+        decoratorControlJPanel.add(ClearDecorationButton);
+        decoratorControlJPanel.add(Box.createRigidArea(new Dimension(0,5)));
+        decoratorControlJPanel.add(ApplyDecorationButton);
+        decoratorControlJPanel.add(Box.createRigidArea(new Dimension(0,5)));
+        decoratorControlJPanel.setBorder(BorderFactory.createTitledBorder("Decorator Pattern"));
+        decoratorControlJPanel.add(decoratorCombobox);
 
         //Add the buttons to the buttonPanel
+        buttonPanel.add(Box.createHorizontalGlue());
+        buttonPanel.add(Box.createVerticalGlue());
         buttonPanel.add(lightButton);
+        buttonPanel.add(Box.createRigidArea(new Dimension(5,0)));
         buttonPanel.add(exitButton);
+
+        // Add the custome decorator controller group to ButtonPanel
+        buttonPanel.add(Box.createRigidArea(new Dimension(5,0)));
+        buttonPanel.add(decoratorControlJPanel);
+        buttonPanel.add(Box.createHorizontalGlue());
+        buttonPanel.add(Box.createVerticalGlue());
+        
+        // Set alignment to left
+        ClearDecorationButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+        ApplyDecorationButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+        decoratorCombobox.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        //set alignment to top
+        lightButton.setAlignmentY(Component.TOP_ALIGNMENT);
+        exitButton.setAlignmentY(Component.TOP_ALIGNMENT);
+        decoratorControlJPanel.setAlignmentY(Component.TOP_ALIGNMENT);
 
         //Enable buttons to listen for a mouse-click
         lightButton.addActionListener(this);
         exitButton.addActionListener(this);
+        ApplyDecorationButton.addActionListener(new ActionListener(){
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                house_controller.onApplyDecoratorClicked();
+            }
+
+        });
+        ClearDecorationButton.addActionListener(new ActionListener(){
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                house_controller.onClearDecorationsClicked();
+
+            }
+            
+        });
 
         //Positioning Panels
         add(titlePanel, BorderLayout.NORTH);
-        add(imagePanel, BorderLayout.CENTER);
-        imagePanel.add(infoPanel, BorderLayout.NORTH);
+        add(middlePanel, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
-        add(new house(), BorderLayout.CENTER);
+        // middlePanel.add(infoPanel, BorderLayout.NORTH);
 
         // set buttonPanel width and height
         buttonPanel.setPreferredSize(new Dimension((int) screenSize.getWidth(), buttonPanelHeight));
@@ -141,18 +239,18 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
 
     }//Constructor
 
-    public void paint(Graphics g) {
-        //Call the paint method of the superclass
-        super.paint(g);
+    // public void paint(Graphics g) {
+    //     //Call the paint method of the superclass
+    //     super.paint(g);
 
-        int imageHeight = (int) (screenSize.getHeight() - buttonPanelHeight - 20);
-        Image resizedImage = image.getScaledInstance(-1, imageHeight, Image. SCALE_SMOOTH);
+    //     int imageHeight = (int) (screenSize.getHeight() - buttonPanelHeight - 20);
+    //     Image resizedImage = image.getScaledInstance(-1, imageHeight, Image. SCALE_SMOOTH);
 
-        imageStartXaxis = (int) (screenSize.getWidth() - resizedImage.getWidth(null)) / 2;
-        imageStartYaxis = 10;
-        g.drawImage(resizedImage, imageStartXaxis, imageStartYaxis, this);
+    //     imageStartXaxis = (int) (screenSize.getWidth() - resizedImage.getWidth(null)) / 2;
+    //     imageStartYaxis = 10;
+    //     g.drawImage(resizedImage, imageStartXaxis, imageStartYaxis, this);
 
-    } //paint
+    // } //paint
 
     //Coding the event-handling routine
     public void actionPerformed(ActionEvent event) {

@@ -1,27 +1,39 @@
 package fivefishes.design.patterns.group.assignment.entities;
 
-import java.awt.Color;
-import java.awt.Dimension;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.awt.*;
+
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 
+import fivefishes.design.patterns.group.assignment.entities.enums.StaticResources;
 import fivefishes.design.patterns.group.assignment.interfaces.IDecoratable;
 
-public class house extends JLayeredPane implements IDecoratable{
-    public house(){
-        presets();
+public class house implements IDecoratable {
+    private BufferedImage image;
+    private JLabel imagelbl;
+
+    public house() {
     }
 
     @Override
-    public void decorate() {
-        // TODO Auto-generated method stub
-
-    }
-
-    private void presets(){
-        setPreferredSize(new Dimension(300,300));
-        setOpaque(true);
-        setLocation(0, 0);
-        setBackground(Color.BLACK);
+    public ArrayList<JLabel> getImages() {
+        try {
+            image = ImageIO.read(new File(StaticResources.DefaultHouse.label));
+            int imageHeight = 300;
+            Image resizedImage = image.getScaledInstance(-1, imageHeight, Image.SCALE_SMOOTH);
+            imagelbl = new JLabel(new ImageIcon(resizedImage));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        imagelbl.setBounds(0, 0, 300, 300);
+        return new ArrayList<JLabel>(Arrays.asList(imagelbl));
     }
 }
