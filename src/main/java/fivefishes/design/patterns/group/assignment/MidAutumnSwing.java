@@ -27,9 +27,11 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
                 add(rabbitObserver);
             }}
     );
-    private JLabel clockLabel = new JLabel("A song will be played every 1 minute");
+    private JLabel timerLabel = new TimerLabel();
     private ObserverCheckBox rabbitObserverCheckBox = new ObserverCheckBox(clockSubject, rabbitObserver);
     private ObserverCheckBox audioPlayerObserverCheckBox = new ObserverCheckBox(clockSubject, audioPlayerObserver);
+    SubjectWorker subjectWorker = new SubjectWorker(clockSubject);
+    TimerWorker timerWorker = new TimerWorker(timerLabel);
     ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
 
 
@@ -105,7 +107,7 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         //Setting colour of button panel
         buttonPanel.setBackground(Color.white);
 
-        SubjectWorker subjectWorker = new SubjectWorker(clockSubject);
+        new Thread(timerWorker).start();
         executorService.scheduleAtFixedRate(subjectWorker, 0, 1, TimeUnit.MINUTES);
 
         //Naming buttons
@@ -127,7 +129,7 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         //Add the buttons to the buttonPanel
         buttonPanel.add(lightButton);
         buttonPanel.add(exitButton);
-        buttonPanel.add(clockLabel, BorderLayout.SOUTH);
+        buttonPanel.add(timerLabel);
         buttonPanel.add(rabbitObserverCheckBox);
         buttonPanel.add(audioPlayerObserverCheckBox);
 
