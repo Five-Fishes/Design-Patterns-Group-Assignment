@@ -15,6 +15,11 @@ public class ClockSubject implements Subject {
     }
 
     @Override
+    public boolean isRegistered(Observer observer) {
+        return observers.contains(observer);
+    }
+
+    @Override
     public void register(Observer observer) {
         observers.add(observer);
     }

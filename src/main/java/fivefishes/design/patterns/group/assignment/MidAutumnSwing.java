@@ -28,6 +28,8 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
             }}
     );
     private JLabel clockLabel = new JLabel("A song will be played every 1 minute");
+    private ObserverCheckBox rabbitObserverCheckBox = new ObserverCheckBox(clockSubject, rabbitObserver);
+    private ObserverCheckBox audioPlayerObserverCheckBox = new ObserverCheckBox(clockSubject, audioPlayerObserver);
     ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
 
 
@@ -126,6 +128,8 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         buttonPanel.add(lightButton);
         buttonPanel.add(exitButton);
         buttonPanel.add(clockLabel, BorderLayout.SOUTH);
+        buttonPanel.add(rabbitObserverCheckBox);
+        buttonPanel.add(audioPlayerObserverCheckBox);
 
         //Enable buttons to listen for a mouse-click
         lightButton.addActionListener(this);
