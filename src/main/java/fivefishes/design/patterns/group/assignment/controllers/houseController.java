@@ -1,4 +1,4 @@
-package controllers;
+package fivefishes.design.patterns.group.assignment.controllers;
 
 import java.awt.*;
 import java.util.ArrayList;

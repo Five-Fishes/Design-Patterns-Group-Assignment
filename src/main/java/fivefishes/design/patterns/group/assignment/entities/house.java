@@ -11,7 +11,6 @@ import java.awt.*;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
 
 import fivefishes.design.patterns.group.assignment.entities.enums.StaticResources;
 import fivefishes.design.patterns.group.assignment.interfaces.IDecoratable;

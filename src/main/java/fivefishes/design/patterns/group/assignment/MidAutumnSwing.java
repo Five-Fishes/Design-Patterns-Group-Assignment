@@ -5,7 +5,7 @@ import javax.swing.*;
 
 import java.awt.Component;
 
-import controllers.houseController;
+import fivefishes.design.patterns.group.assignment.controllers.houseController;
 import fivefishes.design.patterns.group.assignment.entities.background;
 import fivefishes.design.patterns.group.assignment.entities.house;
 import fivefishes.design.patterns.group.assignment.entities.houseBase;
@@ -153,14 +153,14 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
 
         // Setup Combobox
         String[] decoratorOptions = {"lantern decorator", "firework decorator", "candles decorator", "flags decorator"};
-        JComboBox decoratorCombobox = new JComboBox(decoratorOptions);
+        JComboBox<String> decoratorCombobox = new JComboBox<String>(decoratorOptions);
         decoratorCombobox.setSelectedIndex(0);
         decoratorCombobox.setMaximumSize(new Dimension(300,30));
         decoratorCombobox.addActionListener(new ActionListener(){
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                JComboBox cb = (JComboBox)e.getSource();
+                JComboBox<String> cb = (JComboBox<String>)e.getSource();
                 String decoratorName = (String)cb.getSelectedItem();
                 house_controller.onDecorationSelected(decoratorName.replace(" ", ""));
             }
