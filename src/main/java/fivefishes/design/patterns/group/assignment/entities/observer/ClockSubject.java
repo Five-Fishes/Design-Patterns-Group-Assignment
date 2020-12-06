@@ -8,15 +8,15 @@ import java.util.Set;
 
 public class ClockSubject implements Subject {
 
-    private Set<Observer> observers = new HashSet<>();
+    private Set<Observer> observers;
 
     public ClockSubject(Set<Observer> observers) {
         this.observers = observers;
     }
 
     @Override
-    public boolean isRegistered(Observer observer) {
-        return observers.contains(observer);
+    public Set<Observer> getObservers() {
+        return observers;
     }
 
     @Override

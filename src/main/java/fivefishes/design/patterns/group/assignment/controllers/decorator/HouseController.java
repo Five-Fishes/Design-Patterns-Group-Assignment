@@ -89,6 +89,6 @@ public class HouseController {
         }
 
         /* Repaint the specified region */
-        jFrame.repaint();
+        jLayeredPane.repaint();
     }
 }

@@ -4,7 +4,7 @@ import java.util.Set;
 
 public interface Subject {
 
-    boolean isRegistered(Observer observer);
+    Set<Observer> getObservers();
 
     void register(Observer observer);
 

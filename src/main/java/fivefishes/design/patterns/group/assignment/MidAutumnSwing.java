@@ -8,15 +8,14 @@ import fivefishes.design.patterns.group.assignment.components.decorator.*;
 import fivefishes.design.patterns.group.assignment.components.memento.ChangErFashionComboBox;
 import fivefishes.design.patterns.group.assignment.components.memento.RedoButton;
 import fivefishes.design.patterns.group.assignment.components.memento.UndoButton;
+import fivefishes.design.patterns.group.assignment.components.observer.*;
 import fivefishes.design.patterns.group.assignment.controllers.abstractFactory.AbstractFactoryController;
 import fivefishes.design.patterns.group.assignment.controllers.behaviour.LightBehaviourController;
 import fivefishes.design.patterns.group.assignment.controllers.decorator.HouseController;
 import fivefishes.design.patterns.group.assignment.controllers.memento.MementoController;
+import fivefishes.design.patterns.group.assignment.controllers.observer.ObserverController;
 import fivefishes.design.patterns.group.assignment.entities.decorator.House;
 
-import fivefishes.design.patterns.group.assignment.components.observer.ObserverCheckBox;
-import fivefishes.design.patterns.group.assignment.components.observer.RabbitGifLabel;
-import fivefishes.design.patterns.group.assignment.components.observer.TimerLabel;
 import fivefishes.design.patterns.group.assignment.entities.observer.*;
 import fivefishes.design.patterns.group.assignment.enumerations.observer.RabbitImage;
 import fivefishes.design.patterns.group.assignment.interfaces.observer.Observer;
@@ -93,9 +92,10 @@ public class MidAutumnSwing extends JFrame {
     private int changErImageYaxis;
 
     // Observer
+    private JLabel timerLabel = new TimerLabel();
     private RabbitGifLabel dancingRabbitLabel = new RabbitGifLabel(RabbitImage.Dancing);
     private RabbitGifLabel singingRabbitLabel = new RabbitGifLabel(RabbitImage.Singing);
-    private Observer audioPlayerObserver = new AudioPlayerObserver();
+    private AudioPlayerObserver audioPlayerObserver = new AudioPlayerObserver();
     private RabbitObserver rabbitObserver = new RabbitObserver(dancingRabbitLabel, singingRabbitLabel);
     private ClockSubject clockSubject = new ClockSubject(
             new HashSet<Observer>() {{
@@ -103,9 +103,9 @@ public class MidAutumnSwing extends JFrame {
                 add(rabbitObserver);
             }}
     );
-    private JLabel timerLabel = new TimerLabel();
-    private ObserverCheckBox rabbitObserverCheckBox = new ObserverCheckBox(clockSubject, rabbitObserver);
-    private ObserverCheckBox audioPlayerObserverCheckBox = new ObserverCheckBox(clockSubject, audioPlayerObserver);
+    private ObserverController observerController = new ObserverController(clockSubject, audioPlayerObserver, rabbitObserver);
+    private RabbitObserverCheckBox rabbitObserverCheckBox = new RabbitObserverCheckBox(observerController);
+    private AudioPlayerObserverCheckBox audioPlayerObserverCheckBox = new AudioPlayerObserverCheckBox(observerController);
     SubjectWorker subjectWorker = new SubjectWorker(clockSubject);
     TimerWorker timerWorker = new TimerWorker(timerLabel);
     ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
