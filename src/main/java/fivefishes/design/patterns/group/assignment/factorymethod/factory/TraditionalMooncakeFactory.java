@@ -3,9 +3,8 @@ package fivefishes.design.patterns.group.assignment.factorymethod.factory;
 import fivefishes.design.patterns.group.assignment.factorymethod.ingredient.dough.Dough;
 import fivefishes.design.patterns.group.assignment.factorymethod.ingredient.dough.TenderDough;
 import fivefishes.design.patterns.group.assignment.factorymethod.ingredient.fillings.MelonSeeds;
-import fivefishes.design.patterns.group.assignment.factorymethod.ingredient.fillings.SaltedEggYolk;
 import fivefishes.design.patterns.group.assignment.factorymethod.ingredient.fillings.Fillings;
-import fivefishes.design.patterns.group.assignment.factorymethod.ingredient.mooncakeImage.CantoneseMooncakeImage;
+import fivefishes.design.patterns.group.assignment.factorymethod.ingredient.mooncakeImage.TraditionalMooncakeImage;
 import fivefishes.design.patterns.group.assignment.factorymethod.ingredient.mooncakeImage.MooncakeImage;
 import fivefishes.design.patterns.group.assignment.factorymethod.ingredient.paste.*;
 import fivefishes.design.patterns.group.assignment.factorymethod.ingredient.shape.RoundShape;
@@ -44,6 +43,6 @@ public class TraditionalMooncakeFactory implements MooncakeFactory {
 
     @Override
     public MooncakeImage createImage() {
-        return new CantoneseMooncakeImage();
+        return new TraditionalMooncakeImage();
     }
 }

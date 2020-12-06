@@ -49,6 +49,7 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
     private Image resizedTableImage;
     private JLabel tableLabel;
     private String mooncakeStyle;
+    private JButton addMooncakeButton;
 
 //    private MooncakeStyle[] mooncakeStyles = MooncakeStyle.values();
     private JComboBox mooncakeStyleCombo = new JComboBox();
@@ -113,25 +114,29 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         //Naming buttons
         lightButton = new JButton("Lights");
         exitButton = new JButton("Exit");
+        addMooncakeButton = new JButton("Create Mooncake");
 
         //Setting colour of buttons
         lightButton.setBackground(Color.red);
         exitButton.setBackground(Color.red);
+        addMooncakeButton.setBackground(Color.red);
 
         //Setting font on buttons
         lightButton.setFont(new Font("CENTURY GOTHIC", Font.ITALIC, 16));
         exitButton.setFont(new Font("CENTURY GOTHIC", Font.ITALIC, 16));
+        addMooncakeButton.setFont(new Font("CENTURY GOTHIC", Font.ITALIC, 16));
 
         //Setting font colour on buttons
         lightButton.setForeground(Color.white);
         exitButton.setForeground(Color.white);
+        addMooncakeButton.setForeground(Color.white);
 
         //Enable buttons to listen for a mouse-click
         lightButton.addActionListener(this);
         exitButton.addActionListener(this);
+        addMooncakeButton.addActionListener(this);
         mooncakeStyleCombo.addActionListener(this);
         mooncakeFlavorCombo.addActionListener(this);
-        mooncakeFlavorCombo.setVisible(false);
 
 
         //Positioning Panels
@@ -173,6 +178,7 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         //Add the buttons to the buttonPanel
         buttonPanel.add(mooncakeStyleCombo);
         buttonPanel.add(mooncakeFlavorCombo);
+        buttonPanel.add(addMooncakeButton);
         buttonPanel.add(lightButton);
         buttonPanel.add(exitButton);
 
@@ -227,18 +233,18 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
             MooncakeStyle selectedStyle = (MooncakeStyle) mooncakeStyleCombo.getSelectedItem();
             mooncakeStyle =  selectedStyle.name();
             mooncakeFactory = selectedStyle.getMooncakeFactory();
-            mooncakeFlavorCombo.setVisible(true);
         } else if (event.getSource() == mooncakeFlavorCombo) {
             if(mooncakeFlavorCombo.getSelectedItem().equals("Lotus Seed")) {
-                mooncake = new LotusSeedMooncake(mooncakeFactory);
+                mooncake = new LotusSeedMooncake();
                 mooncake.setName(mooncakeStyle + " Lotus Seed Mooncake");
-                createMooncake(mooncake);
             }
             if(mooncakeFlavorCombo.getSelectedItem().equals("Red Bean")) {
-                mooncake = new RedBeanMooncake(mooncakeFactory);
+                mooncake = new RedBeanMooncake();
                 mooncake.setName(mooncakeStyle + " Red Bean Mooncake");
-                createMooncake(mooncake);
             }
+        } else if(event.getSource() == addMooncakeButton){
+            mooncake.setFactory(mooncakeFactory);
+            createMooncake(mooncake);
         } else {
             System.exit(0);
         }

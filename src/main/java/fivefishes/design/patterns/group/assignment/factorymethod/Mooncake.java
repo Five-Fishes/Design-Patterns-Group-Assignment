@@ -1,5 +1,6 @@
 package fivefishes.design.patterns.group.assignment.factorymethod;
 
+import fivefishes.design.patterns.group.assignment.factorymethod.factory.MooncakeFactory;
 import fivefishes.design.patterns.group.assignment.factorymethod.ingredient.dough.Dough;
 import fivefishes.design.patterns.group.assignment.factorymethod.ingredient.fillings.Fillings;
 import fivefishes.design.patterns.group.assignment.factorymethod.ingredient.mooncakeImage.MooncakeImage;
@@ -12,7 +13,7 @@ import java.awt.image.BufferedImage;
 
 public abstract class Mooncake {
     String name;
-
+    MooncakeFactory mooncakeFactory;
     MooncakeImage image;
     Dough dough;
     Shape shape;
@@ -20,6 +21,7 @@ public abstract class Mooncake {
     LotusSeedPaste lotusSeedPaste;
     GreenTeaPaste greenTeaPaste;
     Fillings yolk;
+
 
     public abstract void prepare();
 
@@ -61,5 +63,9 @@ public abstract class Mooncake {
 
     public Fillings getYolk() {
         return yolk;
+    }
+
+    public void setFactory(MooncakeFactory mooncakeFactory){
+        this.mooncakeFactory = mooncakeFactory;
     }
 }

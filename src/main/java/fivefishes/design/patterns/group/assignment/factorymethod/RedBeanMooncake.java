@@ -3,9 +3,8 @@ package fivefishes.design.patterns.group.assignment.factorymethod;
 import fivefishes.design.patterns.group.assignment.factorymethod.factory.MooncakeFactory;
 
 public class RedBeanMooncake extends Mooncake{
-    private MooncakeFactory mooncakeFactory;
 
-    public RedBeanMooncake(MooncakeFactory mooncakeFactory){
+    public void setFactory(MooncakeFactory mooncakeFactory){
         this.mooncakeFactory = mooncakeFactory;
     }
 

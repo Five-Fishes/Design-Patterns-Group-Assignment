@@ -3,11 +3,6 @@ package fivefishes.design.patterns.group.assignment.factorymethod;
 import fivefishes.design.patterns.group.assignment.factorymethod.factory.MooncakeFactory;
 
 public class LotusSeedMooncake extends Mooncake {
-    private MooncakeFactory mooncakeFactory;
-
-    public LotusSeedMooncake(MooncakeFactory mooncakeFactory){
-        this.mooncakeFactory = mooncakeFactory;
-    }
 
     @Override
     public void prepare() {
