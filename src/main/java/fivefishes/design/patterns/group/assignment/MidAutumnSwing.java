@@ -83,10 +83,10 @@ public class MidAutumnSwing extends JFrame {
     private int changErImageYaxis;
 
     //Panels
-    private JPanel titlePanel, backgroundImagePanel, buttonPanel, infoPanel;
+    private JPanel backgroundImagePanel, buttonPanel, infoPanel;
 
     //Labels
-    private JLabel title, backgroundImageLabel;
+    private JLabel backgroundImageLabel;
 
     //Image
     private BufferedImage image;
@@ -119,22 +119,6 @@ public class MidAutumnSwing extends JFrame {
 
         setLayout(new BorderLayout());
 
-        //Setting the title of the JLabel
-        title = new JLabel("Creative Designed By 30000007333 From <a href=\"https://lovepik.com/image-400492940/mid-autumn-festival-background.html\">LovePik.com</a>");
-
-        //Setting the font
-        title.setFont(new Font("CENTURY GOTHIC", Font.ITALIC, 15));
-
-        //Setting the text colour to red and positioning it to the centre
-        title.setForeground(Color.red);
-        title.setHorizontalAlignment(SwingConstants.CENTER);
-
-        //Creating a new JPanel and adding the title label to it
-        titlePanel = new JPanel();
-        titlePanel.add(title);
-
-        //Setting colour of title panel
-        titlePanel.setBackground(Color.white);
 
         //Creating a new JPanel for the image to go
         backgroundImagePanel = new JPanel();
@@ -217,7 +201,6 @@ public class MidAutumnSwing extends JFrame {
 
 
         //Positioning Panels
-        add(titlePanel, BorderLayout.NORTH);
         add(backgroundImagePanel, BorderLayout.CENTER);
         backgroundImageLabel.setLayout(null);
         add(buttonPanel, BorderLayout.SOUTH);
