@@ -3,9 +3,7 @@ package fivefishes.design.patterns.group.assignment.entities.observer;
 import fivefishes.design.patterns.group.assignment.components.observer.RabbitGifLabel;
 import fivefishes.design.patterns.group.assignment.interfaces.observer.Observer;
 import fivefishes.design.patterns.group.assignment.interfaces.observer.Subject;
-import fivefishes.design.patterns.group.assignment.worker.observer.RabbitGifWorker;
-
-import javax.swing.*;
+import fivefishes.design.patterns.group.assignment.workers.observer.RabbitGifWorker;
 
 public class RabbitObserver implements Observer {
 

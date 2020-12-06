@@ -1,23 +1,23 @@
 package fivefishes.design.patterns.group.assignment;
 
-import fivefishes.design.patterns.group.assignment.entities.Memento.ChangErFashion;
-import fivefishes.design.patterns.group.assignment.entities.Memento.History;
-import fivefishes.design.patterns.group.assignment.entities.enumeration.Fashion;
+import fivefishes.design.patterns.group.assignment.entities.memento.ChangErFashion;
+import fivefishes.design.patterns.group.assignment.entities.memento.History;
+import fivefishes.design.patterns.group.assignment.enumerations.memento.Fashion;
 
 import fivefishes.design.patterns.group.assignment.components.observer.ObserverCheckBox;
 import fivefishes.design.patterns.group.assignment.components.observer.RabbitGifLabel;
 import fivefishes.design.patterns.group.assignment.components.observer.TimerLabel;
 import fivefishes.design.patterns.group.assignment.entities.observer.*;
-import fivefishes.design.patterns.group.assignment.enums.observer.RabbitImage;
+import fivefishes.design.patterns.group.assignment.enumerations.observer.RabbitImage;
 import fivefishes.design.patterns.group.assignment.interfaces.observer.Observer;
-import fivefishes.design.patterns.group.assignment.worker.observer.SubjectWorker;
-import fivefishes.design.patterns.group.assignment.worker.observer.TimerWorker;
+import fivefishes.design.patterns.group.assignment.workers.observer.SubjectWorker;
+import fivefishes.design.patterns.group.assignment.workers.observer.TimerWorker;
 
-import fivefishes.design.patterns.group.assignment.entities.lantern.Bright;
-import fivefishes.design.patterns.group.assignment.entities.lantern.Dim;
-import fivefishes.design.patterns.group.assignment.entities.lantern.Lantern;
-import fivefishes.design.patterns.group.assignment.entities.lantern.NoLight;
-import fivefishes.design.patterns.group.assignment.entities.lantern.Normal;
+import fivefishes.design.patterns.group.assignment.entities.behaviour.Bright;
+import fivefishes.design.patterns.group.assignment.entities.behaviour.Dim;
+import fivefishes.design.patterns.group.assignment.entities.behaviour.Lantern;
+import fivefishes.design.patterns.group.assignment.entities.behaviour.NoLight;
+import fivefishes.design.patterns.group.assignment.entities.behaviour.Normal;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
