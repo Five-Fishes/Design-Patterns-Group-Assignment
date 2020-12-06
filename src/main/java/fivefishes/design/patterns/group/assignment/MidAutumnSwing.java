@@ -12,9 +12,8 @@ import fivefishes.design.patterns.group.assignment.components.observer.RabbitGif
 import fivefishes.design.patterns.group.assignment.components.observer.TimerLabel;
 import fivefishes.design.patterns.group.assignment.entities.observer.*;
 import fivefishes.design.patterns.group.assignment.enumerations.observer.RabbitImage;
-import fivefishes.design.patterns.group.assignment.factorymethod.LotusSeedMooncake;
-import fivefishes.design.patterns.group.assignment.factorymethod.MooncakeStyle;
-import fivefishes.design.patterns.group.assignment.factorymethod.RedBeanMooncake;
+import fivefishes.design.patterns.group.assignment.factorymethod.*;
+import fivefishes.design.patterns.group.assignment.factorymethod.factory.MooncakeFactory;
 import fivefishes.design.patterns.group.assignment.interfaces.observer.Observer;
 import fivefishes.design.patterns.group.assignment.workers.observer.SubjectWorker;
 import fivefishes.design.patterns.group.assignment.workers.observer.TimerWorker;
