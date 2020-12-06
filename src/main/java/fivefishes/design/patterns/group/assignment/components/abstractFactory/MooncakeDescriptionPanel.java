@@ -1,4 +1,6 @@
-package fivefishes.design.patterns.group.assignment.entities.abstractFactory;
+package fivefishes.design.patterns.group.assignment.components.abstractFactory;
+
+import fivefishes.design.patterns.group.assignment.entities.abstractFactory.mooncake.Mooncake;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;

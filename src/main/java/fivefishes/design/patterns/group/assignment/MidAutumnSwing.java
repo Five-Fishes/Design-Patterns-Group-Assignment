@@ -1,11 +1,18 @@
 package fivefishes.design.patterns.group.assignment;
 
+import fivefishes.design.patterns.group.assignment.components.abstractFactory.AddMooncakeButton;
+import fivefishes.design.patterns.group.assignment.components.abstractFactory.MooncakeDescriptionPanel;
+import fivefishes.design.patterns.group.assignment.components.abstractFactory.MooncakeFlavorComboBox;
+import fivefishes.design.patterns.group.assignment.components.abstractFactory.MooncakeStyleComboBox;
 import fivefishes.design.patterns.group.assignment.components.decorator.*;
+import fivefishes.design.patterns.group.assignment.controllers.abstractFactory.AbstractFactoryController;
 import fivefishes.design.patterns.group.assignment.controllers.decorator.HouseController;
-import fivefishes.design.patterns.group.assignment.entities.abstractFactory.*;
+import fivefishes.design.patterns.group.assignment.entities.abstractFactory.mooncake.LotusSeedMooncake;
+import fivefishes.design.patterns.group.assignment.entities.abstractFactory.mooncake.RedBeanMooncake;
 import fivefishes.design.patterns.group.assignment.entities.decorator.House;
 import fivefishes.design.patterns.group.assignment.entities.memento.ChangErFashion;
 import fivefishes.design.patterns.group.assignment.entities.memento.History;
+import fivefishes.design.patterns.group.assignment.enumerations.abstractFactory.MooncakeStyle;
 import fivefishes.design.patterns.group.assignment.enumerations.memento.Fashion;
 
 import fivefishes.design.patterns.group.assignment.components.observer.ObserverCheckBox;
@@ -13,7 +20,6 @@ import fivefishes.design.patterns.group.assignment.components.observer.RabbitGif
 import fivefishes.design.patterns.group.assignment.components.observer.TimerLabel;
 import fivefishes.design.patterns.group.assignment.entities.observer.*;
 import fivefishes.design.patterns.group.assignment.enumerations.observer.RabbitImage;
-import fivefishes.design.patterns.group.assignment.interfaces.abstractFactory.MooncakeFactory;
 import fivefishes.design.patterns.group.assignment.interfaces.observer.Observer;
 import fivefishes.design.patterns.group.assignment.workers.observer.SubjectWorker;
 import fivefishes.design.patterns.group.assignment.workers.observer.TimerWorker;
@@ -105,22 +111,15 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
     private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
     //Abstract Factory
-    private MooncakeFactory mooncakeFactory;
-    private Mooncake mooncake;
-    private ImageIcon mooncakeImage = new ImageIcon();
     private JLabel mooncakeLabel = new JLabel();
     private BufferedImage tableImage;
     private Image resizedTableImage;
     private JLabel tableLabel;
-    private String mooncakeStyle;
-    private JButton addMooncakeButton;
-
-    private JComboBox mooncakeStyleCombo = new JComboBox();
-
-
-    private String[] mooncakeFlavorList = {"Lotus Seed","Red Bean"};
-    private JComboBox<String> mooncakeFlavorCombo = new JComboBox<>(mooncakeFlavorList);
-    private MooncakeDescriptionPanel descriptionPanel= new MooncakeDescriptionPanel();
+    private MooncakeDescriptionPanel mooncakeDescriptionPanel = new MooncakeDescriptionPanel();
+    AbstractFactoryController abstractFactoryController = new AbstractFactoryController(mooncakeDescriptionPanel, mooncakeLabel, this);
+    private AddMooncakeButton addMooncakeButton = new AddMooncakeButton(abstractFactoryController);
+    private MooncakeStyleComboBox mooncakeStyleComboBox = new MooncakeStyleComboBox(abstractFactoryController);
+    private MooncakeFlavorComboBox mooncakeFlavorComboBox = new MooncakeFlavorComboBox(abstractFactoryController);
 
     public MidAutumnSwing() {
         //Set title
@@ -162,13 +161,13 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         backgroundImagePanel.add(backgroundImageLabel);
         backgroundImagePanel.setBackground(Color.white);
 
-        houseLabel.setBounds(0,0,300,300);
+        houseLabel.setBounds(0, 0, 300, 300);
         houseLayeredPanel.add(houseLabel, JLayeredPane.DEFAULT_LAYER);
         int imageHeight = (int) (screenSize.getHeight() - buttonPanelHeight - 20);
         int imageWidth = (int) screenSize.getWidth();
-        houseLayeredPanel.setBounds(0,0,imageWidth,imageHeight);
+        houseLayeredPanel.setBounds(0, 0, imageWidth, imageHeight);
         backgroundImagePanel.add(houseImagePanel, JLayeredPane.DEFAULT_LAYER);
-        houseLayeredPanel.setBounds(200,250,300,300);
+        houseLayeredPanel.setBounds(200, 250, 300, 300);
         backgroundImageLabel.add(houseLayeredPanel, JLayeredPane.PALETTE_LAYER);
 
         //init lantern and setting option for lantern light
@@ -224,44 +223,33 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         defaultChangEr();
 
 
-        addMooncakeButton = new JButton("Create Mooncake");
-
-        addMooncakeButton.setBackground(Color.red);
-
-        addMooncakeButton.setFont(new Font("CENTURY GOTHIC", Font.ITALIC, 16));
-
-        addMooncakeButton.setForeground(Color.white);
-
 //Abstract Factory Mooncake
         mooncakeLabel.setBounds(1155, 570, 207, 53);
-        descriptionPanel.setBounds(800,300, 400, 300);
-        descriptionPanel.setLayout(new BoxLayout(descriptionPanel,  BoxLayout.Y_AXIS));
+        mooncakeDescriptionPanel.setBounds(800, 300, 400, 300);
+        mooncakeDescriptionPanel.setLayout(new BoxLayout(mooncakeDescriptionPanel, BoxLayout.Y_AXIS));
         backgroundImageLabel.add(mooncakeLabel);
-        backgroundImageLabel.add(descriptionPanel);
-        descriptionPanel.setVisible(false);
+        backgroundImageLabel.add(mooncakeDescriptionPanel);
+        mooncakeDescriptionPanel.setVisible(false);
         mooncakeLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (descriptionPanel.isShowing()){
-                    descriptionPanel.setVisible(false);
+                if (mooncakeDescriptionPanel.isShowing()) {
+                    mooncakeDescriptionPanel.setVisible(false);
                 } else {
-                    descriptionPanel.setVisible(true);
+                    mooncakeDescriptionPanel.setVisible(true);
                 }
             }
         });
-        for(MooncakeStyle mooncakeStyle: MooncakeStyle.values()) {
-            mooncakeStyleCombo.addItem(mooncakeStyle);
-        }
 
         //Table Image
         resizedTableImage = tableImage.getScaledInstance(260, 178, Image.SCALE_SMOOTH);
         tableLabel = new JLabel(new ImageIcon(resizedTableImage));
-        tableLabel.setBounds( 1120, 600, 260, 178);
+        tableLabel.setBounds(1120, 600, 260, 178);
         backgroundImageLabel.add(tableLabel);
 
         //Add the buttons to the buttonPanel
-        buttonPanel.add(mooncakeStyleCombo);
-        buttonPanel.add(mooncakeFlavorCombo);
+        buttonPanel.add(mooncakeStyleComboBox);
+        buttonPanel.add(mooncakeFlavorComboBox);
         buttonPanel.add(addMooncakeButton);
         //Add the buttons to the buttonPanel
         buttonPanel.add(lanternLightOptions);
@@ -271,10 +259,6 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         buttonPanel.add(decoratorComboBox);
         buttonPanel.add(applyDecorationButton);
         buttonPanel.add(clearDecorationButton);
-
-        addMooncakeButton.addActionListener(this);
-        mooncakeStyleCombo.addActionListener(this);
-        mooncakeFlavorCombo.addActionListener(this);
 
 
         //Positioning Panels
@@ -333,21 +317,9 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         }
     } //paint
 
-    public Image resizeMooncakeImage(BufferedImage mooncakeBufferedImage) {
-        return mooncakeBufferedImage.getScaledInstance(207,53,Image.SCALE_SMOOTH);
-    }
-
-    public void createMooncake(Mooncake mooncake) {
-        mooncake.prepare();
-        mooncakeImage.setImage(resizeMooncakeImage(mooncake.getImage()));
-        mooncakeLabel.setIcon(mooncakeImage);
-        descriptionPanel.setLabel(mooncake);
-        repaint();
-    }
-
     //Coding the event-handling routine
     public void actionPerformed(ActionEvent event) {
-         if (event.getSource() == lanternLightOptions) {
+        if (event.getSource() == lanternLightOptions) {
             switch (lanternLightOptions.getSelectedItem().toString()) {
                 case "No Light":
                     lantern.setLightBehaviour(new NoLight());
@@ -363,25 +335,7 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
                     break;
             }
             repaint();
-        }
-        else if (event.getSource() == mooncakeStyleCombo) {
-            MooncakeStyle selectedStyle = (MooncakeStyle) mooncakeStyleCombo.getSelectedItem();
-            mooncakeStyle =  selectedStyle.name();
-            mooncakeFactory = selectedStyle.getMooncakeFactory();
-        } else if (event.getSource() == mooncakeFlavorCombo) {
-            if(mooncakeFlavorCombo.getSelectedItem().equals("Lotus Seed")) {
-                mooncake = new LotusSeedMooncake();
-                mooncake.setName(mooncakeStyle + " Lotus Seed Mooncake");
-            }
-            if(mooncakeFlavorCombo.getSelectedItem().equals("Red Bean")) {
-                mooncake = new RedBeanMooncake();
-                mooncake.setName(mooncakeStyle + " Red Bean Mooncake");
-            }
-        } else if(event.getSource() == addMooncakeButton){
-            mooncake.setFactory(mooncakeFactory);
-            createMooncake(mooncake);
-        }
-        else {
+        } else {
 
             if (event.getSource() == undoButton) {
                 changErFashion.getFromChangErMemento(changeErFashionHistory.undo());

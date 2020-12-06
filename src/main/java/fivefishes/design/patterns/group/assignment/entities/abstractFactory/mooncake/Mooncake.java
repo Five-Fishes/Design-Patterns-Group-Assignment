@@ -1,4 +1,4 @@
-package fivefishes.design.patterns.group.assignment.entities.abstractFactory;
+package fivefishes.design.patterns.group.assignment.entities.abstractFactory.mooncake;
 
 import fivefishes.design.patterns.group.assignment.interfaces.abstractFactory.MooncakeFactory;
 import fivefishes.design.patterns.group.assignment.entities.abstractFactory.ingredient.dough.Dough;

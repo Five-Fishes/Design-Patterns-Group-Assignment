@@ -1,4 +1,4 @@
-package fivefishes.design.patterns.group.assignment.entities.abstractFactory;
+package fivefishes.design.patterns.group.assignment.entities.abstractFactory.mooncake;
 
 public class LotusSeedMooncake extends Mooncake {
 
