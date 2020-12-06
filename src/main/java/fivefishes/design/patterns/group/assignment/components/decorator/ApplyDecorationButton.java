@@ -1,6 +1,6 @@
 package fivefishes.design.patterns.group.assignment.components.decorator;
 
-import fivefishes.design.patterns.group.assignment.controllers.HouseController;
+import fivefishes.design.patterns.group.assignment.controllers.decorator.HouseController;
 
 import javax.swing.*;
 import java.awt.*;

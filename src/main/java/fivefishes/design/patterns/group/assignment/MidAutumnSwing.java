@@ -1,7 +1,8 @@
 package fivefishes.design.patterns.group.assignment;
 
 import fivefishes.design.patterns.group.assignment.components.decorator.*;
-import fivefishes.design.patterns.group.assignment.controllers.HouseController;
+import fivefishes.design.patterns.group.assignment.controllers.decorator.HouseController;
+import fivefishes.design.patterns.group.assignment.entities.abstractFactory.*;
 import fivefishes.design.patterns.group.assignment.entities.decorator.House;
 import fivefishes.design.patterns.group.assignment.entities.memento.ChangErFashion;
 import fivefishes.design.patterns.group.assignment.entities.memento.History;
@@ -12,8 +13,7 @@ import fivefishes.design.patterns.group.assignment.components.observer.RabbitGif
 import fivefishes.design.patterns.group.assignment.components.observer.TimerLabel;
 import fivefishes.design.patterns.group.assignment.entities.observer.*;
 import fivefishes.design.patterns.group.assignment.enumerations.observer.RabbitImage;
-import fivefishes.design.patterns.group.assignment.factorymethod.*;
-import fivefishes.design.patterns.group.assignment.factorymethod.factory.MooncakeFactory;
+import fivefishes.design.patterns.group.assignment.interfaces.abstractFactory.MooncakeFactory;
 import fivefishes.design.patterns.group.assignment.interfaces.observer.Observer;
 import fivefishes.design.patterns.group.assignment.workers.observer.SubjectWorker;
 import fivefishes.design.patterns.group.assignment.workers.observer.TimerWorker;
@@ -151,7 +151,7 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         //Retrieving image from the file
         try {
             image = ImageIO.read(new File("src/main/java/fivefishes/design/patterns/group/assignment/resources/background.jpg"));
-            tableImage = ImageIO.read(new File("src/main/java/fivefishes/design/patterns/group/assignment/resources/table.png"));
+            tableImage = ImageIO.read(new File("src/main/java/fivefishes/design/patterns/group/assignment/resources/abstractFactory/table.png"));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
