@@ -41,6 +41,7 @@ import java.util.concurrent.TimeUnit;
 
 public class MidAutumnSwing extends JFrame implements ActionListener {
 
+    // Observer
     private RabbitGifLabel dancingRabbitLabel = new RabbitGifLabel(RabbitImage.Dancing);
     private RabbitGifLabel singingRabbitLabel = new RabbitGifLabel(RabbitImage.Singing);
     private Observer audioPlayerObserver = new AudioPlayerObserver();
@@ -68,9 +69,6 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
     ClearDecorationButton clearDecorationButton = new ClearDecorationButton(houseController);
     HouseImagePanel houseImagePanel = new HouseImagePanel();
 
-    //Buttons
-    private JButton lightButton;
-    private JButton exitButton;
 
     // Memento
     ChangErFashion changErFashion = new ChangErFashion();
@@ -117,19 +115,12 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
     private String mooncakeStyle;
     private JButton addMooncakeButton;
 
-//    private MooncakeStyle[] mooncakeStyles = MooncakeStyle.values();
     private JComboBox mooncakeStyleCombo = new JComboBox();
 
 
     private String[] mooncakeFlavorList = {"Lotus Seed","Red Bean"};
     private JComboBox<String> mooncakeFlavorCombo = new JComboBox<>(mooncakeFlavorList);
     private MooncakeDescriptionPanel descriptionPanel= new MooncakeDescriptionPanel();
-
-    //Test Image
-    private String testImageUrl;
-    private Image testImage;
-    private String staticTestImageUrl = "src/main/java/fivefishes/design/patterns/group/assignment/resources/ChangEr/redblue.png";
-    private Image staticTestImage;
 
     public MidAutumnSwing() {
         //Set title
@@ -233,24 +224,12 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         defaultChangEr();
 
 
-        //Naming buttons
-        lightButton = new JButton("Lights");
-        exitButton = new JButton("Exit");
         addMooncakeButton = new JButton("Create Mooncake");
 
-        //Setting colour of buttons
-        lightButton.setBackground(Color.red);
-        exitButton.setBackground(Color.red);
         addMooncakeButton.setBackground(Color.red);
 
-        //Setting font on buttons
-        lightButton.setFont(new Font("CENTURY GOTHIC", Font.ITALIC, 16));
-        exitButton.setFont(new Font("CENTURY GOTHIC", Font.ITALIC, 16));
         addMooncakeButton.setFont(new Font("CENTURY GOTHIC", Font.ITALIC, 16));
 
-        //Setting font colour on buttons
-        lightButton.setForeground(Color.white);
-        exitButton.setForeground(Color.white);;
         addMooncakeButton.setForeground(Color.white);
 
 //Abstract Factory Mooncake
@@ -284,11 +263,8 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         buttonPanel.add(mooncakeStyleCombo);
         buttonPanel.add(mooncakeFlavorCombo);
         buttonPanel.add(addMooncakeButton);
-        buttonPanel.add(lightButton);
-        buttonPanel.add(exitButton);
         //Add the buttons to the buttonPanel
         buttonPanel.add(lanternLightOptions);
-        buttonPanel.add(exitButton);
         buttonPanel.add(timerLabel);
         buttonPanel.add(rabbitObserverCheckBox);
         buttonPanel.add(audioPlayerObserverCheckBox);
@@ -296,9 +272,6 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         buttonPanel.add(applyDecorationButton);
         buttonPanel.add(clearDecorationButton);
 
-        //Enable buttons to listen for a mouse-click
-        lightButton.addActionListener(this);
-        exitButton.addActionListener(this);
         addMooncakeButton.addActionListener(this);
         mooncakeStyleCombo.addActionListener(this);
         mooncakeFlavorCombo.addActionListener(this);
@@ -374,9 +347,7 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
 
     //Coding the event-handling routine
     public void actionPerformed(ActionEvent event) {
-        if (event.getSource() == exitButton) {
-            System.exit(0);
-        } else if (event.getSource() == lanternLightOptions) {
+         if (event.getSource() == lanternLightOptions) {
             switch (lanternLightOptions.getSelectedItem().toString()) {
                 case "No Light":
                     lantern.setLightBehaviour(new NoLight());
