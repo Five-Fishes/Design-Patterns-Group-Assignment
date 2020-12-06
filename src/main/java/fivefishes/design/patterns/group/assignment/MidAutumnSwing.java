@@ -1,5 +1,9 @@
 package fivefishes.design.patterns.group.assignment;
 
+import fivefishes.design.patterns.group.assignment.entities.Memento.ChangErFashion;
+import fivefishes.design.patterns.group.assignment.entities.Memento.History;
+import fivefishes.design.patterns.group.assignment.entities.enumeration.Fashion;
+
 import fivefishes.design.patterns.group.assignment.components.observer.ObserverCheckBox;
 import fivefishes.design.patterns.group.assignment.components.observer.RabbitGifLabel;
 import fivefishes.design.patterns.group.assignment.components.observer.TimerLabel;
@@ -46,17 +50,25 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
     private JButton lightButton;
     private JButton exitButton;
 
+    // Memento
+    ChangErFashion changErFashion = new ChangErFashion();
+    History changeErFashionHistory = new History();
+    private Fashion[] changeErFashionList = Fashion.values();
+    private JComboBox<String> changErFashionOptions = new JComboBox<>();
+    private JButton undoButton;
+    private JButton redoButton;
+    private BufferedImage changErImage;
+    private int changErImageXaxis;
+    private int changErImageYaxis;
+
     //Panels
-    private JPanel titlePanel, backgroundImagePanel, buttonPanel;
+    private JPanel titlePanel, backgroundImagePanel, buttonPanel, infoPanel;
 
     //Labels
     private JLabel title, backgroundImageLabel;
 
     //Image
     private BufferedImage image;
-
-
-    private boolean lights = false;
 
     private int imageHeight;
     private Image resizedImage;
@@ -66,6 +78,10 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
     private int imageStartYaxis;
     private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
+    private String testImageUrl;
+    private Image testImage;
+    private String staticTestImageUrl = "src/main/java/fivefishes/design/patterns/group/assignment/resources/ChangEr/redblue.png";
+    private Image staticTestImage;
 
     public MidAutumnSwing() {
         //Set title
@@ -116,31 +132,55 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         new Thread(timerWorker).start();
         executorService.scheduleAtFixedRate(subjectWorker, 0, 1, TimeUnit.MINUTES);
 
+        infoPanel = new JPanel();
+        infoPanel.add(new JLabel("Only 5 ChangEr will be saved in history"));
+        infoPanel.setBackground(Color.white);
+        buttonPanel.add(infoPanel);
+        buttonPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        // Dropdown Construct and Config
+        for (Fashion changeErFashion: changeErFashionList) {
+            changErFashionOptions.addItem(changeErFashion.name());
+        }
+
+        changErFashionOptions.addActionListener(this);
+        undoButton = new JButton("Undo");
+        redoButton = new JButton("Redo");
+        undoButton.setBackground(Color.red);
+        redoButton.setBackground(Color.green);
+        undoButton.setFont(new Font("CENTURY GOTHIC", Font.ITALIC, 16));
+        redoButton.setFont(new Font("CENTURY GOTHIC", Font.ITALIC, 16));
+        undoButton.setForeground(Color.white);
+        redoButton.setForeground(Color.white);
+        undoButton.addActionListener(this);
+        redoButton.addActionListener(this);
+        buttonPanel.add(undoButton);
+        buttonPanel.add(changErFashionOptions);
+        buttonPanel.add(redoButton);
+        changErImageXaxis = (int) screenSize.getWidth() - 350;
+        changErImageYaxis = 100;
+        defaultChangEr();
+
+
         //Naming buttons
-        lightButton = new JButton("Lights");
         exitButton = new JButton("Exit");
 
         //Setting colour of buttons
-        lightButton.setBackground(Color.red);
         exitButton.setBackground(Color.red);
 
         //Setting font on buttons
-        lightButton.setFont(new Font("CENTURY GOTHIC", Font.ITALIC, 16));
         exitButton.setFont(new Font("CENTURY GOTHIC", Font.ITALIC, 16));
 
         //Setting font colour on buttons
-        lightButton.setForeground(Color.white);
         exitButton.setForeground(Color.white);
 
         //Add the buttons to the buttonPanel
-        buttonPanel.add(lightButton);
         buttonPanel.add(exitButton);
         buttonPanel.add(timerLabel);
         buttonPanel.add(rabbitObserverCheckBox);
         buttonPanel.add(audioPlayerObserverCheckBox);
 
         //Enable buttons to listen for a mouse-click
-        lightButton.addActionListener(this);
         exitButton.addActionListener(this);
 
         //Positioning Panels
@@ -157,8 +197,7 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         backgroundImageLabel.add(singingRabbitLabel);
 
         //Configure the frame
-//        getContentPane().setBackground(Color.white);
-//        getContentPane().add(panelContainer);
+        getContentPane().setBackground(Color.white);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(screenSize);
         setLocation(0, 0);
@@ -170,23 +209,59 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         //Call the paint method of the superclass
         super.paint(g);
 
-        // Perform drawing here using g.drawImage()
+        if (changErImage != null) {
+            Image resizedChangErImage = changErImage.getScaledInstance(-1, 180, Image.SCALE_SMOOTH);
+            g.drawImage(resizedChangErImage, changErImageXaxis, changErImageYaxis, this);
+        }
 
     } //paint
 
     //Coding the event-handling routine
-    public void actionPerformed(ActionEvent event) {
-
-        if (event.getSource() == lightButton) {
-
-        }//if light
-
-        else {
+    public void actionPerformed(ActionEvent event){
+        if (event.getSource() == exitButton) {
             System.exit(0);
-
-        }//else exit
+        } else {
+            if (event.getSource() == undoButton) {
+                changErFashion.getFromChangErMemento(changeErFashionHistory.undo());
+                try {
+                    readFashionImage();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else if (event.getSource() == redoButton) {
+                changErFashion.getFromChangErMemento(changeErFashionHistory.redo());
+                try {
+                    readFashionImage();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else if (event.getSource() == changErFashionOptions) {
+                changErFashion.setFashionType((String) changErFashionOptions.getSelectedItem());
+                changeErFashionHistory.add(changErFashion.createMemento());
+                try {
+                    readFashionImage();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            repaint();
+        }
 
     } //actionPerformed
+
+    public void readFashionImage() throws IOException {
+        changErImage = ImageIO.read(new File(changErFashion.getChangErImageUrl()));
+    }
+
+    public void defaultChangEr() {
+        changErFashion.setFashionType(changErFashionOptions.getItemAt(0));
+        changeErFashionHistory.add(changErFashion.createMemento());
+        try {
+            readFashionImage();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     private void backgroundImageConfiguration() {
         imageHeight = (int) (screenSize.getHeight() - buttonPanelHeight - 20);
