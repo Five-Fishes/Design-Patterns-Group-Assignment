@@ -1,9 +1,6 @@
 package fivefishes.design.patterns.group.assignment;
 
-import fivefishes.design.patterns.group.assignment.components.abstractFactory.AddMooncakeButton;
-import fivefishes.design.patterns.group.assignment.components.abstractFactory.MooncakeDescriptionPanel;
-import fivefishes.design.patterns.group.assignment.components.abstractFactory.MooncakeFlavorComboBox;
-import fivefishes.design.patterns.group.assignment.components.abstractFactory.MooncakeStyleComboBox;
+import fivefishes.design.patterns.group.assignment.components.abstractFactory.*;
 import fivefishes.design.patterns.group.assignment.components.decorator.*;
 import fivefishes.design.patterns.group.assignment.controllers.abstractFactory.AbstractFactoryController;
 import fivefishes.design.patterns.group.assignment.controllers.decorator.HouseController;
@@ -111,11 +108,11 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
     private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
     //Abstract Factory
-    private JLabel mooncakeLabel = new JLabel();
     private BufferedImage tableImage;
     private Image resizedTableImage;
     private JLabel tableLabel;
     private MooncakeDescriptionPanel mooncakeDescriptionPanel = new MooncakeDescriptionPanel();
+    private MooncakeLabel mooncakeLabel = new MooncakeLabel(mooncakeDescriptionPanel);
     AbstractFactoryController abstractFactoryController = new AbstractFactoryController(mooncakeDescriptionPanel, mooncakeLabel, this);
     private AddMooncakeButton addMooncakeButton = new AddMooncakeButton(abstractFactoryController);
     private MooncakeStyleComboBox mooncakeStyleComboBox = new MooncakeStyleComboBox(abstractFactoryController);
@@ -230,16 +227,6 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         backgroundImageLabel.add(mooncakeLabel);
         backgroundImageLabel.add(mooncakeDescriptionPanel);
         mooncakeDescriptionPanel.setVisible(false);
-        mooncakeLabel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (mooncakeDescriptionPanel.isShowing()) {
-                    mooncakeDescriptionPanel.setVisible(false);
-                } else {
-                    mooncakeDescriptionPanel.setVisible(true);
-                }
-            }
-        });
 
         //Table Image
         resizedTableImage = tableImage.getScaledInstance(260, 178, Image.SCALE_SMOOTH);
@@ -336,7 +323,6 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
             }
             repaint();
         } else {
-
             if (event.getSource() == undoButton) {
                 changErFashion.getFromChangErMemento(changeErFashionHistory.undo());
                 try {
