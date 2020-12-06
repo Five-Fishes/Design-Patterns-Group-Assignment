@@ -13,6 +13,11 @@ import fivefishes.design.patterns.group.assignment.interfaces.observer.Observer;
 import fivefishes.design.patterns.group.assignment.worker.observer.SubjectWorker;
 import fivefishes.design.patterns.group.assignment.worker.observer.TimerWorker;
 
+import fivefishes.design.patterns.group.assignment.entities.lantern.Bright;
+import fivefishes.design.patterns.group.assignment.entities.lantern.Dim;
+import fivefishes.design.patterns.group.assignment.entities.lantern.Lantern;
+import fivefishes.design.patterns.group.assignment.entities.lantern.NoLight;
+import fivefishes.design.patterns.group.assignment.entities.lantern.Normal;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -70,6 +75,12 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
     //Image
     private BufferedImage image;
 
+    //init Lantern variable
+    private JComboBox<String> lanternLightOptions = new JComboBox<>();
+    private Lantern lantern;
+
+    private boolean lights = false;
+
     private int imageHeight;
     private Image resizedImage;
 
@@ -78,10 +89,10 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
     private int imageStartYaxis;
     private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-    private String testImageUrl;
-    private Image testImage;
-    private String staticTestImageUrl = "src/main/java/fivefishes/design/patterns/group/assignment/resources/ChangEr/redblue.png";
-    private Image staticTestImage;
+//    private String testImageUrl;
+//    private Image testImage;
+//    private String staticTestImageUrl = "src/main/java/fivefishes/design/patterns/group/assignment/resources/ChangEr/redblue.png";
+//    private Image staticTestImage;
 
     public MidAutumnSwing() {
         //Set title
@@ -122,6 +133,20 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
 
         backgroundImagePanel.add(backgroundImageLabel);
         backgroundImagePanel.setBackground(Color.white);
+
+        //init lantern and setting option for lantern light
+        BufferedImage lanternImage = null;
+        try {
+            lanternImage = ImageIO.read(new File("src/main/java/fivefishes/design/patterns/group/assignment/resources/lantern/green_lantern.png"));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        lantern = new Lantern(lanternImage, new NoLight());
+        lanternLightOptions.addItem("No Light");
+        lanternLightOptions.addItem("Dim");
+        lanternLightOptions.addItem("Normal");
+        lanternLightOptions.addItem("Bright");
+        lanternLightOptions.addActionListener(this);
 
         //Creating a new JPanel for the buttons to go
         buttonPanel = new JPanel();
@@ -175,6 +200,8 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         exitButton.setForeground(Color.white);
 
         //Add the buttons to the buttonPanel
+        buttonPanel.add(lanternLightOptions);
+        buttonPanel.add(lightButton);
         buttonPanel.add(exitButton);
         buttonPanel.add(timerLabel);
         buttonPanel.add(rabbitObserverCheckBox);
@@ -208,19 +235,41 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
     public void paint(Graphics g) {
         //Call the paint method of the superclass
         super.paint(g);
+        if(lantern != null){
+
+            //can change this to change the location of lantern
+            int lanternImageStartXaxis = 400;
+            int lanternImageStartYaxis = 200;
+
+            Image resizedLanternImage = lantern.getBaseImage().getScaledInstance(-1, 100, Image. SCALE_SMOOTH);
+            g.drawImage(resizedLanternImage, lanternImageStartXaxis, lanternImageStartYaxis, this);
+            int lanternHeight = resizedLanternImage.getHeight(null);
+            int lanternWidth = resizedLanternImage.getWidth(null);
+            int lanternCenterX = lanternImageStartXaxis + lanternWidth/2;
+            int lanternCenterY = lanternImageStartYaxis + lanternHeight/2;
+            int lanternRadiusRatio = lantern.getLightRadiusRatio();
+            float lanternIntensity = lantern.getLightIntensity();
+            float[] Fractions = {0.5f, 1.0f};
+            Color[] Colors = {new Color(1f, 1f, 1f, lanternIntensity), new Color(1f, 1f, 0f, 0.0f) };
+            if(lanternRadiusRatio != 0){ //if dim light no repainting, else it will throw exception
+                Paint paint = new RadialGradientPaint(lanternCenterX, lanternCenterY, lanternWidth*lanternRadiusRatio/2, Fractions, Colors);
+                Graphics2D g2 = (Graphics2D) g;
+                g2.setPaint(paint);
+                g2.fillOval(lanternCenterX - (lanternHeight*lanternRadiusRatio)/2, lanternCenterY - (lanternHeight*lanternRadiusRatio)/2, lanternHeight*lanternRadiusRatio, lanternHeight*lanternRadiusRatio);
+            }
+        }
 
         if (changErImage != null) {
             Image resizedChangErImage = changErImage.getScaledInstance(-1, 180, Image.SCALE_SMOOTH);
             g.drawImage(resizedChangErImage, changErImageXaxis, changErImageYaxis, this);
         }
-
     } //paint
 
     //Coding the event-handling routine
     public void actionPerformed(ActionEvent event){
         if (event.getSource() == exitButton) {
             System.exit(0);
-        } else {
+        } else if {
             if (event.getSource() == undoButton) {
                 changErFashion.getFromChangErMemento(changeErFashionHistory.undo());
                 try {
@@ -245,7 +294,25 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
                 }
             }
             repaint();
+
+        }//if light
+        else if(event.getSource() == lanternLightOptions){
+            switch(lanternLightOptions.getSelectedItem().toString()){
+                case "No Light": lantern.setLightBehaviour(new NoLight());
+                    break;
+                case "Dim": lantern.setLightBehaviour(new Dim());
+                    break;
+                case "Normal": lantern.setLightBehaviour(new Normal());
+                    break;
+                case "Bright": lantern.setLightBehaviour(new Bright());
+                    break;
+            }
+            repaint();
         }
+        else {
+            System.exit(0);
+
+        }//else exit
 
     } //actionPerformed
 
