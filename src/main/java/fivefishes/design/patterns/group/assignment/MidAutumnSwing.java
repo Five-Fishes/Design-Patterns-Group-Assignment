@@ -18,6 +18,7 @@ import fivefishes.design.patterns.group.assignment.entities.lantern.Dim;
 import fivefishes.design.patterns.group.assignment.entities.lantern.Lantern;
 import fivefishes.design.patterns.group.assignment.entities.lantern.NoLight;
 import fivefishes.design.patterns.group.assignment.entities.lantern.Normal;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -33,10 +34,10 @@ import java.util.concurrent.TimeUnit;
 
 public class MidAutumnSwing extends JFrame implements ActionListener {
 
-    private RabbitGifLabel dancingRabbitLabel= new RabbitGifLabel(RabbitImage.Dancing);
-    private RabbitGifLabel singingRabbitLabel= new RabbitGifLabel(RabbitImage.Singing);
+    private RabbitGifLabel dancingRabbitLabel = new RabbitGifLabel(RabbitImage.Dancing);
+    private RabbitGifLabel singingRabbitLabel = new RabbitGifLabel(RabbitImage.Singing);
     private Observer audioPlayerObserver = new AudioPlayerObserver();
-    private RabbitObserver rabbitObserver = new RabbitObserver(dancingRabbitLabel,singingRabbitLabel);
+    private RabbitObserver rabbitObserver = new RabbitObserver(dancingRabbitLabel, singingRabbitLabel);
     private ClockSubject clockSubject = new ClockSubject(
             new HashSet<Observer>() {{
                 add(audioPlayerObserver);
@@ -52,7 +53,6 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
 
 
     //Buttons
-    private JButton lightButton;
     private JButton exitButton;
 
     // Memento
@@ -164,7 +164,7 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         buttonPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         // Dropdown Construct and Config
-        for (Fashion changeErFashion: changeErFashionList) {
+        for (Fashion changeErFashion : changeErFashionList) {
             changErFashionOptions.addItem(changeErFashion.name());
         }
 
@@ -201,7 +201,6 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
 
         //Add the buttons to the buttonPanel
         buttonPanel.add(lanternLightOptions);
-        buttonPanel.add(lightButton);
         buttonPanel.add(exitButton);
         buttonPanel.add(timerLabel);
         buttonPanel.add(rabbitObserverCheckBox);
@@ -235,27 +234,27 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
     public void paint(Graphics g) {
         //Call the paint method of the superclass
         super.paint(g);
-        if(lantern != null){
+        if (lantern != null) {
 
             //can change this to change the location of lantern
             int lanternImageStartXaxis = 400;
             int lanternImageStartYaxis = 200;
 
-            Image resizedLanternImage = lantern.getBaseImage().getScaledInstance(-1, 100, Image. SCALE_SMOOTH);
+            Image resizedLanternImage = lantern.getBaseImage().getScaledInstance(-1, 100, Image.SCALE_SMOOTH);
             g.drawImage(resizedLanternImage, lanternImageStartXaxis, lanternImageStartYaxis, this);
             int lanternHeight = resizedLanternImage.getHeight(null);
             int lanternWidth = resizedLanternImage.getWidth(null);
-            int lanternCenterX = lanternImageStartXaxis + lanternWidth/2;
-            int lanternCenterY = lanternImageStartYaxis + lanternHeight/2;
+            int lanternCenterX = lanternImageStartXaxis + lanternWidth / 2;
+            int lanternCenterY = lanternImageStartYaxis + lanternHeight / 2;
             int lanternRadiusRatio = lantern.getLightRadiusRatio();
             float lanternIntensity = lantern.getLightIntensity();
             float[] Fractions = {0.5f, 1.0f};
-            Color[] Colors = {new Color(1f, 1f, 1f, lanternIntensity), new Color(1f, 1f, 0f, 0.0f) };
-            if(lanternRadiusRatio != 0){ //if dim light no repainting, else it will throw exception
-                Paint paint = new RadialGradientPaint(lanternCenterX, lanternCenterY, lanternWidth*lanternRadiusRatio/2, Fractions, Colors);
+            Color[] Colors = {new Color(1f, 1f, 1f, lanternIntensity), new Color(1f, 1f, 0f, 0.0f)};
+            if (lanternRadiusRatio != 0) { //if dim light no repainting, else it will throw exception
+                Paint paint = new RadialGradientPaint(lanternCenterX, lanternCenterY, lanternWidth * lanternRadiusRatio / 2, Fractions, Colors);
                 Graphics2D g2 = (Graphics2D) g;
                 g2.setPaint(paint);
-                g2.fillOval(lanternCenterX - (lanternHeight*lanternRadiusRatio)/2, lanternCenterY - (lanternHeight*lanternRadiusRatio)/2, lanternHeight*lanternRadiusRatio, lanternHeight*lanternRadiusRatio);
+                g2.fillOval(lanternCenterX - (lanternHeight * lanternRadiusRatio) / 2, lanternCenterY - (lanternHeight * lanternRadiusRatio) / 2, lanternHeight * lanternRadiusRatio, lanternHeight * lanternRadiusRatio);
             }
         }
 
@@ -266,10 +265,27 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
     } //paint
 
     //Coding the event-handling routine
-    public void actionPerformed(ActionEvent event){
+    public void actionPerformed(ActionEvent event) {
         if (event.getSource() == exitButton) {
             System.exit(0);
-        } else if {
+        } else if (event.getSource() == lanternLightOptions) {
+            switch (lanternLightOptions.getSelectedItem().toString()) {
+                case "No Light":
+                    lantern.setLightBehaviour(new NoLight());
+                    break;
+                case "Dim":
+                    lantern.setLightBehaviour(new Dim());
+                    break;
+                case "Normal":
+                    lantern.setLightBehaviour(new Normal());
+                    break;
+                case "Bright":
+                    lantern.setLightBehaviour(new Bright());
+                    break;
+            }
+            repaint();
+        } else {
+
             if (event.getSource() == undoButton) {
                 changErFashion.getFromChangErMemento(changeErFashionHistory.undo());
                 try {
@@ -294,24 +310,6 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
                 }
             }
             repaint();
-
-        }//if light
-        else if(event.getSource() == lanternLightOptions){
-            switch(lanternLightOptions.getSelectedItem().toString()){
-                case "No Light": lantern.setLightBehaviour(new NoLight());
-                    break;
-                case "Dim": lantern.setLightBehaviour(new Dim());
-                    break;
-                case "Normal": lantern.setLightBehaviour(new Normal());
-                    break;
-                case "Bright": lantern.setLightBehaviour(new Bright());
-                    break;
-            }
-            repaint();
-        }
-        else {
-            System.exit(0);
-
         }//else exit
 
     } //actionPerformed
