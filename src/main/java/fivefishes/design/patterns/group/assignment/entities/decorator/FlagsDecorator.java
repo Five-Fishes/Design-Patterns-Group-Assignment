@@ -1,6 +1,6 @@
 package fivefishes.design.patterns.group.assignment.entities.decorator;
 
-import fivefishes.design.patterns.group.assignment.enumerations.decorator.House;
+import fivefishes.design.patterns.group.assignment.enumerations.decorator.HouseImage;
 import fivefishes.design.patterns.group.assignment.interfaces.decorator.IDecoratable;
 import java.io.File;
 import java.io.IOException;
@@ -23,7 +23,7 @@ public class FlagsDecorator extends AbstractDecorator {
   public ArrayList<JLabel> getImages() {
     try {
       Image resizedImage;
-      image = ImageIO.read(new File(House.FlagsDecorator.getImageUrl()));
+      image = ImageIO.read(new File(HouseImage.FlagsDecorator.getImageUrl()));
       int imageHeight = 300;
       resizedImage = image.getScaledInstance(-1, imageHeight, Image.SCALE_SMOOTH);
       ArrayList<JLabel> result_arr = new ArrayList<JLabel>(Arrays.asList(new JLabel(new ImageIcon(resizedImage))));

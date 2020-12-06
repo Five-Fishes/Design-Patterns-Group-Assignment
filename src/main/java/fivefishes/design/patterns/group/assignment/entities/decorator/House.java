@@ -12,6 +12,7 @@ import java.awt.*;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
+import fivefishes.design.patterns.group.assignment.enumerations.decorator.HouseImage;
 import fivefishes.design.patterns.group.assignment.interfaces.decorator.IDecoratable;
 
 public class House implements IDecoratable {
@@ -21,7 +22,7 @@ public class House implements IDecoratable {
     @Override
     public ArrayList<JLabel> getImages() {
         try {
-            image = ImageIO.read(new File(fivefishes.design.patterns.group.assignment.enumerations.decorator.House.DefaultHouse.getImageUrl()));
+            image = ImageIO.read(new File(HouseImage.DefaultHouse.getImageUrl()));
             int imageHeight = 300;
             Image resizedImage = image.getScaledInstance(-1, imageHeight, Image.SCALE_SMOOTH);
             imagelbl = new JLabel(new ImageIcon(resizedImage));
