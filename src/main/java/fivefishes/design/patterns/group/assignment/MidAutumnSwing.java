@@ -3,15 +3,13 @@ package fivefishes.design.patterns.group.assignment;
 import fivefishes.design.patterns.group.assignment.components.TableLabel;
 import fivefishes.design.patterns.group.assignment.components.abstractFactory.*;
 import fivefishes.design.patterns.group.assignment.components.decorator.*;
+import fivefishes.design.patterns.group.assignment.components.memento.ChangErFashionComboBox;
+import fivefishes.design.patterns.group.assignment.components.memento.RedoButton;
+import fivefishes.design.patterns.group.assignment.components.memento.UndoButton;
 import fivefishes.design.patterns.group.assignment.controllers.abstractFactory.AbstractFactoryController;
 import fivefishes.design.patterns.group.assignment.controllers.decorator.HouseController;
-import fivefishes.design.patterns.group.assignment.entities.abstractFactory.mooncake.LotusSeedMooncake;
-import fivefishes.design.patterns.group.assignment.entities.abstractFactory.mooncake.RedBeanMooncake;
+import fivefishes.design.patterns.group.assignment.controllers.memento.MementoController;
 import fivefishes.design.patterns.group.assignment.entities.decorator.House;
-import fivefishes.design.patterns.group.assignment.entities.memento.ChangErFashion;
-import fivefishes.design.patterns.group.assignment.entities.memento.History;
-import fivefishes.design.patterns.group.assignment.enumerations.abstractFactory.MooncakeStyle;
-import fivefishes.design.patterns.group.assignment.enumerations.memento.Fashion;
 
 import fivefishes.design.patterns.group.assignment.components.observer.ObserverCheckBox;
 import fivefishes.design.patterns.group.assignment.components.observer.RabbitGifLabel;
@@ -33,8 +31,6 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -75,13 +71,11 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
 
 
     // Memento
-    ChangErFashion changErFashion = new ChangErFashion();
-    History changeErFashionHistory = new History();
-    private Fashion[] changeErFashionList = Fashion.values();
-    private JComboBox<String> changErFashionOptions = new JComboBox<>();
-    private JButton undoButton;
-    private JButton redoButton;
-    private BufferedImage changErImage;
+    private JLabel changErLabel = new JLabel();
+    private MementoController mementoController = new MementoController(changErLabel);
+    private UndoButton undoButton = new UndoButton(mementoController);
+    private RedoButton redoButton = new RedoButton(mementoController);
+    private ChangErFashionComboBox changErFashionComboBox = new ChangErFashionComboBox(mementoController);
     private int changErImageXaxis;
     private int changErImageYaxis;
 
@@ -97,8 +91,6 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
     //init Lantern variable
     private JComboBox<String> lanternLightOptions = new JComboBox<>();
     private Lantern lantern;
-
-    private boolean lights = false;
 
     private int imageHeight;
     private Image resizedImage;
@@ -194,28 +186,14 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         buttonPanel.add(infoPanel);
         buttonPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        // Dropdown Construct and Config
-        for (Fashion changeErFashion : changeErFashionList) {
-            changErFashionOptions.addItem(changeErFashion.name());
-        }
 
-        changErFashionOptions.addActionListener(this);
-        undoButton = new JButton("Undo");
-        redoButton = new JButton("Redo");
-        undoButton.setBackground(Color.red);
-        redoButton.setBackground(Color.green);
-        undoButton.setFont(new Font("CENTURY GOTHIC", Font.ITALIC, 16));
-        redoButton.setFont(new Font("CENTURY GOTHIC", Font.ITALIC, 16));
-        undoButton.setForeground(Color.white);
-        redoButton.setForeground(Color.white);
-        undoButton.addActionListener(this);
-        redoButton.addActionListener(this);
         buttonPanel.add(undoButton);
-        buttonPanel.add(changErFashionOptions);
+        buttonPanel.add(changErFashionComboBox);
         buttonPanel.add(redoButton);
         changErImageXaxis = (int) screenSize.getWidth() - 350;
         changErImageYaxis = 100;
-        defaultChangEr();
+        changErLabel.setBounds(changErImageXaxis, changErImageYaxis, 300, 300);
+        backgroundImageLabel.add(changErLabel);
 
 
 //Abstract Factory Mooncake
@@ -293,11 +271,6 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
                 g2.fillOval(lanternCenterX - (lanternHeight * lanternRadiusRatio) / 2, lanternCenterY - (lanternHeight * lanternRadiusRatio) / 2, lanternHeight * lanternRadiusRatio, lanternHeight * lanternRadiusRatio);
             }
         }
-
-        if (changErImage != null) {
-            Image resizedChangErImage = changErImage.getScaledInstance(-1, 180, Image.SCALE_SMOOTH);
-            g.drawImage(resizedChangErImage, changErImageXaxis, changErImageYaxis, this);
-        }
     } //paint
 
     //Coding the event-handling routine
@@ -318,48 +291,9 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
                     break;
             }
             repaint();
-        } else {
-            if (event.getSource() == undoButton) {
-                changErFashion.getFromChangErMemento(changeErFashionHistory.undo());
-                try {
-                    readFashionImage();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } else if (event.getSource() == redoButton) {
-                changErFashion.getFromChangErMemento(changeErFashionHistory.redo());
-                try {
-                    readFashionImage();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } else if (event.getSource() == changErFashionOptions) {
-                changErFashion.setFashionType((String) changErFashionOptions.getSelectedItem());
-                changeErFashionHistory.add(changErFashion.createMemento());
-                try {
-                    readFashionImage();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            repaint();
-        }//else exit
+        }
 
     } //actionPerformed
-
-    public void readFashionImage() throws IOException {
-        changErImage = ImageIO.read(new File(changErFashion.getChangErImageUrl()));
-    }
-
-    public void defaultChangEr() {
-        changErFashion.setFashionType(changErFashionOptions.getItemAt(0));
-        changeErFashionHistory.add(changErFashion.createMemento());
-        try {
-            readFashionImage();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     private void backgroundImageConfiguration() {
         imageHeight = (int) (screenSize.getHeight() - buttonPanelHeight - 20);
