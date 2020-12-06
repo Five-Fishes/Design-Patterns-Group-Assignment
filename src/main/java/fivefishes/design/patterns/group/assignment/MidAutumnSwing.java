@@ -158,7 +158,7 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         //init lantern and setting option for lantern light
         BufferedImage lanternImage = null;
         try {
-            lanternImage = ImageIO.read(new File("src/main/java/fivefishes/design/patterns/group/assignment/resources/lantern/green_lantern.png"));
+            lanternImage = ImageIO.read(new File("src/main/java/fivefishes/design/patterns/group/assignment/resources/behaviour/green_lantern.png"));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
