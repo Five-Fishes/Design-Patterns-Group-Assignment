@@ -44,6 +44,54 @@ import java.util.concurrent.TimeUnit;
 
 public class MidAutumnSwing extends JFrame {
 
+    // General
+    private JPanel backgroundImagePanel = new JPanel();
+    private JPanel buttonPanel = new JPanel();
+    private JPanel infoPanel = new JPanel();
+    private JLabel backgroundImageLabel;
+
+    private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    private final int buttonPanelHeight = 150;
+
+    // Background
+    private Image backgroundResizedImage;
+    private int imageHeight;
+    private int imageStartXaxis;
+    private int imageStartYaxis;
+
+    //Abstract Factory
+    private TableLabel tableLabel = new TableLabel();
+    private MooncakeDescriptionPanel mooncakeDescriptionPanel = new MooncakeDescriptionPanel();
+    private MooncakeLabel mooncakeLabel = new MooncakeLabel(mooncakeDescriptionPanel);
+    private AbstractFactoryController abstractFactoryController = new AbstractFactoryController(mooncakeDescriptionPanel, mooncakeLabel);
+    private AddMooncakeButton addMooncakeButton = new AddMooncakeButton(abstractFactoryController);
+    private MooncakeStyleComboBox mooncakeStyleComboBox = new MooncakeStyleComboBox(abstractFactoryController);
+    private MooncakeFlavorComboBox mooncakeFlavorComboBox = new MooncakeFlavorComboBox(abstractFactoryController);
+
+    // Behaviour
+    private LanternLabel lanternLabel = new LanternLabel();
+    private LightBehaviourController lightBehaviourController = new LightBehaviourController(lanternLabel);
+    private LanternLightComboBox lanternLightComboBox = new LanternLightComboBox(lightBehaviourController);
+
+    // Decorator
+    House house = new House();
+    JLayeredPane houseLayeredPanel = new JLayeredPane();
+    JLabel houseLabel = house.getImages().get(0);
+    HouseController houseController = new HouseController(houseLayeredPanel, house, this);
+    DecoratorComboBox decoratorComboBox = new DecoratorComboBox(houseController);
+    ApplyDecorationButton applyDecorationButton = new ApplyDecorationButton(houseController);
+    ClearDecorationButton clearDecorationButton = new ClearDecorationButton(houseController);
+    HouseImagePanel houseImagePanel = new HouseImagePanel();
+
+    // Memento
+    private JLabel changErLabel = new JLabel();
+    private MementoController mementoController = new MementoController(changErLabel);
+    private UndoButton undoButton = new UndoButton(mementoController);
+    private RedoButton redoButton = new RedoButton(mementoController);
+    private ChangErFashionComboBox changErFashionComboBox = new ChangErFashionComboBox(mementoController);
+    private int changErImageXaxis;
+    private int changErImageYaxis;
+
     // Observer
     private RabbitGifLabel dancingRabbitLabel = new RabbitGifLabel(RabbitImage.Dancing);
     private RabbitGifLabel singingRabbitLabel = new RabbitGifLabel(RabbitImage.Singing);
@@ -62,80 +110,55 @@ public class MidAutumnSwing extends JFrame {
     TimerWorker timerWorker = new TimerWorker(timerLabel);
     ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
 
-    // Decorator
-    House house = new House();
-    JLayeredPane houseLayeredPanel = new JLayeredPane();
-    JLabel houseLabel = house.getImages().get(0);
-    HouseController houseController = new HouseController(houseLayeredPanel, house, this);
-    DecoratorComboBox decoratorComboBox = new DecoratorComboBox(houseController);
-    ApplyDecorationButton applyDecorationButton = new ApplyDecorationButton(houseController);
-    ClearDecorationButton clearDecorationButton = new ClearDecorationButton(houseController);
-    HouseImagePanel houseImagePanel = new HouseImagePanel();
-
-
-    // Memento
-    private JLabel changErLabel = new JLabel();
-    private MementoController mementoController = new MementoController(changErLabel);
-    private UndoButton undoButton = new UndoButton(mementoController);
-    private RedoButton redoButton = new RedoButton(mementoController);
-    private ChangErFashionComboBox changErFashionComboBox = new ChangErFashionComboBox(mementoController);
-    private int changErImageXaxis;
-    private int changErImageYaxis;
-
-    //Panels
-    private JPanel backgroundImagePanel, buttonPanel, infoPanel;
-
-    //Labels
-    private JLabel backgroundImageLabel;
-
-    //Image
-    private BufferedImage image;
-
-    //init Lantern variable
-    private LanternLabel lanternLabel = new LanternLabel();
-    private LightBehaviourController lightBehaviourController = new LightBehaviourController(lanternLabel);
-    private LanternLightComboBox lanternLightComboBox = new LanternLightComboBox(lightBehaviourController);
-
-    private int imageHeight;
-    private Image resizedImage;
-
-    private final int buttonPanelHeight = 150;
-    private int imageStartXaxis;
-    private int imageStartYaxis;
-    private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-
-    //Abstract Factory
-    private TableLabel tableLabel = new TableLabel();
-    private MooncakeDescriptionPanel mooncakeDescriptionPanel = new MooncakeDescriptionPanel();
-    private MooncakeLabel mooncakeLabel = new MooncakeLabel(mooncakeDescriptionPanel);
-    private AbstractFactoryController abstractFactoryController = new AbstractFactoryController(mooncakeDescriptionPanel, mooncakeLabel);
-    private AddMooncakeButton addMooncakeButton = new AddMooncakeButton(abstractFactoryController);
-    private MooncakeStyleComboBox mooncakeStyleComboBox = new MooncakeStyleComboBox(abstractFactoryController);
-    private MooncakeFlavorComboBox mooncakeFlavorComboBox = new MooncakeFlavorComboBox(abstractFactoryController);
-
     public MidAutumnSwing() {
-        //Set title
-        setTitle("Decorate the Christmas tree!");
 
-        setLayout(new BorderLayout());
+        // General
+        this.setTitle("MidAutumn Festival");
+        this.setLayout(new BorderLayout());
+        this.add(backgroundImagePanel, BorderLayout.CENTER);
+        this.add(buttonPanel, BorderLayout.SOUTH);
+        this.getContentPane().setBackground(Color.white);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setSize(screenSize);
+        this.setLocation(0, 0);
+        this.setVisible(true);
 
-
-        //Creating a new JPanel for the image to go
-        backgroundImagePanel = new JPanel();
-
-        //Retrieving image from the file
-        try {
-            image = ImageIO.read(new File("src/main/java/fivefishes/design/patterns/group/assignment/resources/background.jpg"));
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-
+        // Background
         backgroundImageConfiguration();
-        //Adding the image to a label
-        backgroundImageLabel = new JLabel(new ImageIcon(resizedImage));
+        backgroundImageLabel = new JLabel(new ImageIcon(backgroundResizedImage));
+        backgroundImageLabel.setLayout(null);
         backgroundImagePanel.add(backgroundImageLabel);
         backgroundImagePanel.setBackground(Color.white);
 
+        // infoPanel
+        infoPanel.add(new JLabel("Only 5 ChangEr will be saved in history"));
+        infoPanel.setBackground(Color.white);
+
+        // buttonPanel
+        buttonPanel.add(infoPanel);
+        buttonPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        buttonPanel.setBackground(Color.white);
+        buttonPanel.setPreferredSize(new Dimension((int) screenSize.getWidth(), buttonPanelHeight));
+
+        //Abstract Factory
+        tableLabel.setBounds(1120, 600, 260, 178);
+        mooncakeLabel.setBounds(1155, 570, 207, 53);
+        backgroundImageLabel.add(mooncakeDescriptionPanel);
+        backgroundImageLabel.add(mooncakeLabel);
+        backgroundImageLabel.add(tableLabel);
+        mooncakeDescriptionPanel.setBounds(800, 300, 400, 300);
+        mooncakeDescriptionPanel.setLayout(new BoxLayout(mooncakeDescriptionPanel, BoxLayout.Y_AXIS));
+        mooncakeDescriptionPanel.setVisible(false);
+        buttonPanel.add(mooncakeStyleComboBox);
+        buttonPanel.add(mooncakeFlavorComboBox);
+        buttonPanel.add(addMooncakeButton);
+
+        // Behaviour
+        lanternLabel.setBounds(400, 200, 200, 200);
+        backgroundImageLabel.add(lanternLabel);
+        buttonPanel.add(lanternLightComboBox);
+
+        // Decorator
         houseLabel.setBounds(0, 0, 300, 300);
         houseLayeredPanel.add(houseLabel, JLayeredPane.DEFAULT_LAYER);
         int imageHeight = (int) (screenSize.getHeight() - buttonPanelHeight - 20);
@@ -144,90 +167,44 @@ public class MidAutumnSwing extends JFrame {
         backgroundImagePanel.add(houseImagePanel, JLayeredPane.DEFAULT_LAYER);
         houseLayeredPanel.setBounds(200, 250, 300, 300);
         backgroundImageLabel.add(houseLayeredPanel, JLayeredPane.PALETTE_LAYER);
-
-
-        //Creating a new JPanel for the buttons to go
-        buttonPanel = new JPanel();
-
-        //Setting colour of button panel
-        buttonPanel.setBackground(Color.white);
-
-        new Thread(timerWorker).start();
-        executorService.scheduleAtFixedRate(subjectWorker, 0, 1, TimeUnit.MINUTES);
-
-        infoPanel = new JPanel();
-        infoPanel.add(new JLabel("Only 5 ChangEr will be saved in history"));
-        infoPanel.setBackground(Color.white);
-        buttonPanel.add(infoPanel);
-        buttonPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-
-
-        buttonPanel.add(undoButton);
-        buttonPanel.add(changErFashionComboBox);
-        buttonPanel.add(redoButton);
-        changErImageXaxis = (int) screenSize.getWidth() - 350;
-        changErImageYaxis = 100;
-        changErLabel.setBounds(changErImageXaxis, changErImageYaxis, 300, 300);
-        backgroundImageLabel.add(changErLabel);
-
-
-//Abstract Factory Mooncake
-        mooncakeLabel.setBounds(1155, 570, 207, 53);
-        mooncakeDescriptionPanel.setBounds(800, 300, 400, 300);
-        mooncakeDescriptionPanel.setLayout(new BoxLayout(mooncakeDescriptionPanel, BoxLayout.Y_AXIS));
-        backgroundImageLabel.add(mooncakeLabel);
-        backgroundImageLabel.add(mooncakeDescriptionPanel);
-        mooncakeDescriptionPanel.setVisible(false);
-
-        //Table Image
-        tableLabel.setBounds(1120, 600, 260, 178);
-        backgroundImageLabel.add(tableLabel);
-
-        lanternLabel.setBounds(400, 200, 200, 200);
-        backgroundImageLabel.add(lanternLabel);
-
-        //Add the buttons to the buttonPanel
-        buttonPanel.add(mooncakeStyleComboBox);
-        buttonPanel.add(mooncakeFlavorComboBox);
-        buttonPanel.add(addMooncakeButton);
-        //Add the buttons to the buttonPanel
-        buttonPanel.add(lanternLightComboBox);
-        buttonPanel.add(timerLabel);
-        buttonPanel.add(rabbitObserverCheckBox);
-        buttonPanel.add(audioPlayerObserverCheckBox);
         buttonPanel.add(decoratorComboBox);
         buttonPanel.add(applyDecorationButton);
         buttonPanel.add(clearDecorationButton);
 
+        // Memento
+        changErImageXaxis = (int) screenSize.getWidth() - 350;
+        changErImageYaxis = 100;
+        changErLabel.setBounds(changErImageXaxis, changErImageYaxis, 300, 300);
+        backgroundImageLabel.add(changErLabel);
+        buttonPanel.add(undoButton);
+        buttonPanel.add(changErFashionComboBox);
+        buttonPanel.add(redoButton);
 
-        //Positioning Panels
-        add(backgroundImagePanel, BorderLayout.CENTER);
-        backgroundImageLabel.setLayout(null);
-        add(buttonPanel, BorderLayout.SOUTH);
-
-        // set buttonPanel width and height
-        buttonPanel.setPreferredSize(new Dimension((int) screenSize.getWidth(), buttonPanelHeight));
-
+        // Observer
+        new Thread(timerWorker).start();
+        executorService.scheduleAtFixedRate(subjectWorker, 0, 1, TimeUnit.MINUTES);
         dancingRabbitLabel.setBounds(800, 500, 500, 178);
         singingRabbitLabel.setBounds(1100, 500, 500, 178);
         backgroundImageLabel.add(dancingRabbitLabel);
         backgroundImageLabel.add(singingRabbitLabel);
-
-        //Configure the frame
-        getContentPane().setBackground(Color.white);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(screenSize);
-        setLocation(0, 0);
-        setVisible(true);
-
+        buttonPanel.add(timerLabel);
+        buttonPanel.add(rabbitObserverCheckBox);
+        buttonPanel.add(audioPlayerObserverCheckBox);
+        
     }//Constructor
 
 
     private void backgroundImageConfiguration() {
+        BufferedImage image = null;
+        try {
+            image = ImageIO.read(new File("src/main/java/fivefishes/design/patterns/group/assignment/resources/background.jpg"));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
         imageHeight = (int) (screenSize.getHeight() - buttonPanelHeight - 20);
-        resizedImage = image.getScaledInstance(-1, imageHeight, Image.SCALE_SMOOTH);
+        backgroundResizedImage = image.getScaledInstance(-1, imageHeight, Image.SCALE_SMOOTH);
 
-        imageStartXaxis = (int) (screenSize.getWidth() - resizedImage.getWidth(null)) / 2;
+        imageStartXaxis = (int) (screenSize.getWidth() - backgroundResizedImage.getWidth(null)) / 2;
         imageStartYaxis = 10;
     }
 }//class
