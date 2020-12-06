@@ -2,11 +2,14 @@ package fivefishes.design.patterns.group.assignment;
 
 import fivefishes.design.patterns.group.assignment.components.TableLabel;
 import fivefishes.design.patterns.group.assignment.components.abstractFactory.*;
+import fivefishes.design.patterns.group.assignment.components.behaviour.LanternLabel;
+import fivefishes.design.patterns.group.assignment.components.behaviour.LanternLightComboBox;
 import fivefishes.design.patterns.group.assignment.components.decorator.*;
 import fivefishes.design.patterns.group.assignment.components.memento.ChangErFashionComboBox;
 import fivefishes.design.patterns.group.assignment.components.memento.RedoButton;
 import fivefishes.design.patterns.group.assignment.components.memento.UndoButton;
 import fivefishes.design.patterns.group.assignment.controllers.abstractFactory.AbstractFactoryController;
+import fivefishes.design.patterns.group.assignment.controllers.behaviour.LightBehaviourController;
 import fivefishes.design.patterns.group.assignment.controllers.decorator.HouseController;
 import fivefishes.design.patterns.group.assignment.controllers.memento.MementoController;
 import fivefishes.design.patterns.group.assignment.entities.decorator.House;
@@ -39,7 +42,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class MidAutumnSwing extends JFrame implements ActionListener {
+public class MidAutumnSwing extends JFrame {
 
     // Observer
     private RabbitGifLabel dancingRabbitLabel = new RabbitGifLabel(RabbitImage.Dancing);
@@ -89,8 +92,9 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
     private BufferedImage image;
 
     //init Lantern variable
-    private JComboBox<String> lanternLightOptions = new JComboBox<>();
-    private Lantern lantern;
+    private LanternLabel lanternLabel = new LanternLabel();
+    private LightBehaviourController lightBehaviourController = new LightBehaviourController(lanternLabel);
+    private LanternLightComboBox lanternLightComboBox = new LanternLightComboBox(lightBehaviourController);
 
     private int imageHeight;
     private Image resizedImage;
@@ -157,19 +161,6 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         houseLayeredPanel.setBounds(200, 250, 300, 300);
         backgroundImageLabel.add(houseLayeredPanel, JLayeredPane.PALETTE_LAYER);
 
-        //init lantern and setting option for lantern light
-        BufferedImage lanternImage = null;
-        try {
-            lanternImage = ImageIO.read(new File("src/main/java/fivefishes/design/patterns/group/assignment/resources/behaviour/green_lantern.png"));
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        lantern = new Lantern(lanternImage, new NoLight());
-        lanternLightOptions.addItem("No Light");
-        lanternLightOptions.addItem("Dim");
-        lanternLightOptions.addItem("Normal");
-        lanternLightOptions.addItem("Bright");
-        lanternLightOptions.addActionListener(this);
 
         //Creating a new JPanel for the buttons to go
         buttonPanel = new JPanel();
@@ -208,12 +199,15 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         tableLabel.setBounds(1120, 600, 260, 178);
         backgroundImageLabel.add(tableLabel);
 
+        lanternLabel.setBounds(400, 200, 200, 200);
+        backgroundImageLabel.add(lanternLabel);
+
         //Add the buttons to the buttonPanel
         buttonPanel.add(mooncakeStyleComboBox);
         buttonPanel.add(mooncakeFlavorComboBox);
         buttonPanel.add(addMooncakeButton);
         //Add the buttons to the buttonPanel
-        buttonPanel.add(lanternLightOptions);
+        buttonPanel.add(lanternLightComboBox);
         buttonPanel.add(timerLabel);
         buttonPanel.add(rabbitObserverCheckBox);
         buttonPanel.add(audioPlayerObserverCheckBox);
@@ -245,55 +239,6 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
 
     }//Constructor
 
-    public void paint(Graphics g) {
-        //Call the paint method of the superclass
-        super.paint(g);
-        if (lantern != null) {
-
-            //can change this to change the location of lantern
-            int lanternImageStartXaxis = 400;
-            int lanternImageStartYaxis = 200;
-
-            Image resizedLanternImage = lantern.getBaseImage().getScaledInstance(-1, 100, Image.SCALE_SMOOTH);
-            g.drawImage(resizedLanternImage, lanternImageStartXaxis, lanternImageStartYaxis, this);
-            int lanternHeight = resizedLanternImage.getHeight(null);
-            int lanternWidth = resizedLanternImage.getWidth(null);
-            int lanternCenterX = lanternImageStartXaxis + lanternWidth / 2;
-            int lanternCenterY = lanternImageStartYaxis + lanternHeight / 2;
-            int lanternRadiusRatio = lantern.getLightRadiusRatio();
-            float lanternIntensity = lantern.getLightIntensity();
-            float[] Fractions = {0.5f, 1.0f};
-            Color[] Colors = {new Color(1f, 1f, 1f, lanternIntensity), new Color(1f, 1f, 0f, 0.0f)};
-            if (lanternRadiusRatio != 0) { //if dim light no repainting, else it will throw exception
-                Paint paint = new RadialGradientPaint(lanternCenterX, lanternCenterY, lanternWidth * lanternRadiusRatio / 2, Fractions, Colors);
-                Graphics2D g2 = (Graphics2D) g;
-                g2.setPaint(paint);
-                g2.fillOval(lanternCenterX - (lanternHeight * lanternRadiusRatio) / 2, lanternCenterY - (lanternHeight * lanternRadiusRatio) / 2, lanternHeight * lanternRadiusRatio, lanternHeight * lanternRadiusRatio);
-            }
-        }
-    } //paint
-
-    //Coding the event-handling routine
-    public void actionPerformed(ActionEvent event) {
-        if (event.getSource() == lanternLightOptions) {
-            switch (lanternLightOptions.getSelectedItem().toString()) {
-                case "No Light":
-                    lantern.setLightBehaviour(new NoLight());
-                    break;
-                case "Dim":
-                    lantern.setLightBehaviour(new Dim());
-                    break;
-                case "Normal":
-                    lantern.setLightBehaviour(new Normal());
-                    break;
-                case "Bright":
-                    lantern.setLightBehaviour(new Bright());
-                    break;
-            }
-            repaint();
-        }
-
-    } //actionPerformed
 
     private void backgroundImageConfiguration() {
         imageHeight = (int) (screenSize.getHeight() - buttonPanelHeight - 20);
