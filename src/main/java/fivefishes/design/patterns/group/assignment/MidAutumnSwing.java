@@ -1,5 +1,8 @@
 package fivefishes.design.patterns.group.assignment;
 
+import fivefishes.design.patterns.group.assignment.components.decorator.*;
+import fivefishes.design.patterns.group.assignment.controllers.HouseController;
+import fivefishes.design.patterns.group.assignment.entities.decorator.House;
 import fivefishes.design.patterns.group.assignment.entities.memento.ChangErFashion;
 import fivefishes.design.patterns.group.assignment.entities.memento.History;
 import fivefishes.design.patterns.group.assignment.enumerations.memento.Fashion;
@@ -51,6 +54,15 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
     TimerWorker timerWorker = new TimerWorker(timerLabel);
     ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
 
+    // Decorator
+    House house = new House();
+    JLayeredPane houseLayeredPanel = new JLayeredPane();
+    JLabel houseLabel = house.getImages().get(0);
+    HouseController houseController = new HouseController(houseLayeredPanel, house, this);
+    DecoratorComboBox decoratorComboBox = new DecoratorComboBox(houseController);
+    ApplyDecorationButton applyDecorationButton = new ApplyDecorationButton(houseController);
+    ClearDecorationButton clearDecorationButton = new ClearDecorationButton(houseController);
+    HouseImagePanel houseImagePanel = new HouseImagePanel();
 
     //Buttons
     private JButton exitButton;
@@ -134,6 +146,15 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         backgroundImagePanel.add(backgroundImageLabel);
         backgroundImagePanel.setBackground(Color.white);
 
+        houseLabel.setBounds(0,0,300,300);
+        houseLayeredPanel.add(houseLabel, JLayeredPane.DEFAULT_LAYER);
+        int imageHeight = (int) (screenSize.getHeight() - buttonPanelHeight - 20);
+        int imageWidth = (int) screenSize.getWidth();
+        houseLayeredPanel.setBounds(0,0,imageWidth,imageHeight);
+        backgroundImagePanel.add(houseImagePanel, JLayeredPane.DEFAULT_LAYER);
+        houseLayeredPanel.setBounds(200,250,300,300);
+        backgroundImageLabel.add(houseLayeredPanel, JLayeredPane.PALETTE_LAYER);
+
         //init lantern and setting option for lantern light
         BufferedImage lanternImage = null;
         try {
@@ -205,6 +226,9 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         buttonPanel.add(timerLabel);
         buttonPanel.add(rabbitObserverCheckBox);
         buttonPanel.add(audioPlayerObserverCheckBox);
+        buttonPanel.add(decoratorComboBox);
+        buttonPanel.add(applyDecorationButton);
+        buttonPanel.add(clearDecorationButton);
 
         //Enable buttons to listen for a mouse-click
         exitButton.addActionListener(this);

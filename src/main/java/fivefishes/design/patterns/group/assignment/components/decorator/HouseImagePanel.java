@@ -1,4 +1,4 @@
-package fivefishes.design.patterns.group.assignment.entities;
+package fivefishes.design.patterns.group.assignment.components.decorator;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,14 +8,14 @@ import java.awt.image.BufferedImage;
 import java.awt.*;
 import javax.swing.JPanel;
 
-public class image extends JPanel {
+public class HouseImagePanel extends JPanel {
   private BufferedImage image;
   private int imageStartXaxis;
   private int imageStartYaxis;
   private final int buttonPanelHeight = 150;
   private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-  public image(){
+  public HouseImagePanel(){
     presets();
   }
 
