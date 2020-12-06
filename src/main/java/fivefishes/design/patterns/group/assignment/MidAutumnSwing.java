@@ -1,5 +1,6 @@
 package fivefishes.design.patterns.group.assignment;
 
+import fivefishes.design.patterns.group.assignment.components.TableLabel;
 import fivefishes.design.patterns.group.assignment.components.abstractFactory.*;
 import fivefishes.design.patterns.group.assignment.components.decorator.*;
 import fivefishes.design.patterns.group.assignment.controllers.abstractFactory.AbstractFactoryController;
@@ -108,12 +109,10 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
     private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
     //Abstract Factory
-    private BufferedImage tableImage;
-    private Image resizedTableImage;
-    private JLabel tableLabel;
+    private TableLabel tableLabel = new TableLabel();
     private MooncakeDescriptionPanel mooncakeDescriptionPanel = new MooncakeDescriptionPanel();
     private MooncakeLabel mooncakeLabel = new MooncakeLabel(mooncakeDescriptionPanel);
-    AbstractFactoryController abstractFactoryController = new AbstractFactoryController(mooncakeDescriptionPanel, mooncakeLabel, this);
+    private AbstractFactoryController abstractFactoryController = new AbstractFactoryController(mooncakeDescriptionPanel, mooncakeLabel);
     private AddMooncakeButton addMooncakeButton = new AddMooncakeButton(abstractFactoryController);
     private MooncakeStyleComboBox mooncakeStyleComboBox = new MooncakeStyleComboBox(abstractFactoryController);
     private MooncakeFlavorComboBox mooncakeFlavorComboBox = new MooncakeFlavorComboBox(abstractFactoryController);
@@ -147,7 +146,6 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         //Retrieving image from the file
         try {
             image = ImageIO.read(new File("src/main/java/fivefishes/design/patterns/group/assignment/resources/background.jpg"));
-            tableImage = ImageIO.read(new File("src/main/java/fivefishes/design/patterns/group/assignment/resources/abstractFactory/table.png"));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -229,8 +227,6 @@ public class MidAutumnSwing extends JFrame implements ActionListener {
         mooncakeDescriptionPanel.setVisible(false);
 
         //Table Image
-        resizedTableImage = tableImage.getScaledInstance(260, 178, Image.SCALE_SMOOTH);
-        tableLabel = new JLabel(new ImageIcon(resizedTableImage));
         tableLabel.setBounds(1120, 600, 260, 178);
         backgroundImageLabel.add(tableLabel);
 

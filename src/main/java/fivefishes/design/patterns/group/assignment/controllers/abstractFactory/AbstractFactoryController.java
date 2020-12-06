@@ -22,15 +22,12 @@ public class AbstractFactoryController {
     private MooncakeFlavor mooncakeFlavor = MooncakeFlavor.RedBean;
     private MooncakeDescriptionPanel mooncakeDescriptionPanel;
     private MooncakeLabel mooncakeLabel;
-    private MidAutumnSwing midAutumnSwing;
 
     public AbstractFactoryController(
             MooncakeDescriptionPanel mooncakeDescriptionPanel,
-            MooncakeLabel mooncakeLabel,
-            MidAutumnSwing midAutumnSwing) {
+            MooncakeLabel mooncakeLabel) {
         this.mooncakeDescriptionPanel = mooncakeDescriptionPanel;
         this.mooncakeLabel = mooncakeLabel;
-        this.midAutumnSwing = midAutumnSwing;
     }
 
     public void createMooncake() {
@@ -40,7 +37,7 @@ public class AbstractFactoryController {
         Image resizedMooncakeImage = mooncake.getImage().getScaledInstance(207, 53, Image.SCALE_SMOOTH);
         mooncakeLabel.setIcon(new ImageIcon(resizedMooncakeImage));
         mooncakeDescriptionPanel.setLabel(mooncake);
-        midAutumnSwing.repaint();
+        mooncakeLabel.repaint();
     }
 
     public void setStyle(MooncakeStyle selectedStyle) {
