@@ -18,13 +18,10 @@ public class House implements IDecoratable {
     private BufferedImage image;
     private JLabel imagelbl;
 
-    public House() {
-    }
-
     @Override
     public ArrayList<JLabel> getImages() {
         try {
-            image = ImageIO.read(new File(fivefishes.design.patterns.group.assignment.enumerations.decorator.House.DefaultHouse.label));
+            image = ImageIO.read(new File(fivefishes.design.patterns.group.assignment.enumerations.decorator.House.DefaultHouse.getImageUrl()));
             int imageHeight = 300;
             Image resizedImage = image.getScaledInstance(-1, imageHeight, Image.SCALE_SMOOTH);
             imagelbl = new JLabel(new ImageIcon(resizedImage));

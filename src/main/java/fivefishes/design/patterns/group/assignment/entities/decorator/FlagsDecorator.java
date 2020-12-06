@@ -23,7 +23,7 @@ public class FlagsDecorator extends AbstractDecorator {
   public ArrayList<JLabel> getImages() {
     try {
       Image resizedImage;
-      image = ImageIO.read(new File(House.FlagsDecorator.label));
+      image = ImageIO.read(new File(House.FlagsDecorator.getImageUrl()));
       int imageHeight = 300;
       resizedImage = image.getScaledInstance(-1, imageHeight, Image.SCALE_SMOOTH);
       ArrayList<JLabel> result_arr = new ArrayList<JLabel>(Arrays.asList(new JLabel(new ImageIcon(resizedImage))));
