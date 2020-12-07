@@ -124,24 +124,24 @@ public class MidAutumnSwing extends JFrame {
         backgroundImagePanel.add(backgroundImageLabel);
 
         //Abstract Factory
-        tableLabel.setBounds(1120, 600, 260, 178);
-        mooncakeLabel.setBounds(1155, 570, 207, 53);
+        tableLabel.setBounds(1120, 500, 260, 178);
+        mooncakeLabel.setBounds(1155, 470, 207, 53);
         backgroundImageLabel.add(mooncakeDescriptionPanel);
         backgroundImageLabel.add(mooncakeLabel);
         backgroundImageLabel.add(tableLabel);
-        mooncakeDescriptionPanel.setBounds(800, 300, 400, 300);
+        mooncakeDescriptionPanel.setBounds(800, 200, 400, 300);
         mooncakeDescriptionPanel.setLayout(new BoxLayout(mooncakeDescriptionPanel, BoxLayout.Y_AXIS));
         mooncakeDescriptionPanel.setVisible(false);
 
         // Behaviour
-        lanternLabel.setBounds(400, 200, 200, 200);
+        lanternLabel.setBounds(400, 150, 200, 200);
         backgroundImageLabel.add(lanternLabel);
 
         // Decorator
         houseLabel.setBounds(0, 0, 300, 300);
         houseLayeredPanel.add(houseLabel, JLayeredPane.DEFAULT_LAYER);
         houseLayeredPanel.setBounds(0, 0, imageWidth, imageHeight);
-        houseLayeredPanel.setBounds(200, 300, 300, 300);
+        houseLayeredPanel.setBounds(200, 250, 300, 300);
         backgroundImageLabel.add(houseLayeredPanel, JLayeredPane.PALETTE_LAYER);
 
         // Memento
@@ -153,8 +153,8 @@ public class MidAutumnSwing extends JFrame {
         // Observer
         new Thread(timerWorker).start();
         executorService.scheduleAtFixedRate(subjectWorker, 0, 1, TimeUnit.MINUTES);
-        dancingRabbitLabel.setBounds(changErImageXaxis, 500, 500, 178);
-        singingRabbitLabel.setBounds(changErImageXaxis - 100, 500, 500, 178);
+        dancingRabbitLabel.setBounds(changErImageXaxis, 400, 500, 178);
+        singingRabbitLabel.setBounds(changErImageXaxis - 100, 400, 500, 178);
         backgroundImageLabel.add(dancingRabbitLabel);
         backgroundImageLabel.add(singingRabbitLabel);
         
