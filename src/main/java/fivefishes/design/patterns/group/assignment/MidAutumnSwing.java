@@ -1,16 +1,13 @@
 package fivefishes.design.patterns.group.assignment;
 
+import fivefishes.design.patterns.group.assignment.components.ButtonPanel;
 import fivefishes.design.patterns.group.assignment.components.DesignPatternControlPanel;
 import fivefishes.design.patterns.group.assignment.components.TableLabel;
 import fivefishes.design.patterns.group.assignment.components.abstractFactory.*;
 import fivefishes.design.patterns.group.assignment.components.behaviour.BehaviourControlPanel;
 import fivefishes.design.patterns.group.assignment.components.behaviour.LanternLabel;
-import fivefishes.design.patterns.group.assignment.components.behaviour.LanternLightComboBox;
 import fivefishes.design.patterns.group.assignment.components.decorator.*;
-import fivefishes.design.patterns.group.assignment.components.memento.ChangErFashionComboBox;
 import fivefishes.design.patterns.group.assignment.components.memento.MementoControlPanel;
-import fivefishes.design.patterns.group.assignment.components.memento.RedoButton;
-import fivefishes.design.patterns.group.assignment.components.memento.UndoButton;
 import fivefishes.design.patterns.group.assignment.components.observer.*;
 import fivefishes.design.patterns.group.assignment.controllers.abstractFactory.AbstractFactoryController;
 import fivefishes.design.patterns.group.assignment.controllers.behaviour.LightBehaviourController;
@@ -25,21 +22,15 @@ import fivefishes.design.patterns.group.assignment.interfaces.observer.Observer;
 import fivefishes.design.patterns.group.assignment.workers.observer.SubjectWorker;
 import fivefishes.design.patterns.group.assignment.workers.observer.TimerWorker;
 
-import fivefishes.design.patterns.group.assignment.entities.behaviour.Bright;
-import fivefishes.design.patterns.group.assignment.entities.behaviour.Dim;
-import fivefishes.design.patterns.group.assignment.entities.behaviour.Lantern;
-import fivefishes.design.patterns.group.assignment.entities.behaviour.NoLight;
-import fivefishes.design.patterns.group.assignment.entities.behaviour.Normal;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -47,12 +38,10 @@ import java.util.concurrent.TimeUnit;
 public class MidAutumnSwing extends JFrame {
 
     // General
-    private JPanel backgroundImagePanel = new JPanel();
-    private JPanel buttonPanel = new JPanel();
-    private JLabel backgroundImageLabel;
-
     private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     private final int buttonPanelHeight = 150;
+    private JPanel backgroundImagePanel = new JPanel();
+    private JLabel backgroundImageLabel;
 
     // Background
     private Image backgroundResizedImage;
@@ -106,6 +95,16 @@ public class MidAutumnSwing extends JFrame {
     private DesignPatternControlPanel mementoControlPanel = new MementoControlPanel("Memento", "Only 5 ChangEr will be saved in history", mementoController);
     private DesignPatternControlPanel observerControlPanel = new ObserverControlPanel("Observer", observerController, timerLabel);
 
+    private Dimension buttonPanelDimension = new Dimension((int) screenSize.getWidth(), buttonPanelHeight);
+    private List<DesignPatternControlPanel> designPatternControlPanels = new ArrayList<DesignPatternControlPanel>() {{
+        add(abstractFactoryControlPanel);
+        add(behaviourControlPanel);
+        add(decoratorControlPanel);
+        add(mementoControlPanel);
+        add(observerControlPanel);
+    }};
+    private ButtonPanel buttonPanel = new ButtonPanel(designPatternControlPanels, buttonPanelDimension);
+
     public MidAutumnSwing() {
 
         // General
@@ -122,20 +121,8 @@ public class MidAutumnSwing extends JFrame {
         // Background
         backgroundImageConfiguration();
         backgroundImageLabel = new JLabel(new ImageIcon(backgroundResizedImage));
-        backgroundImageLabel.setLayout(null);
-        backgroundImagePanel.add(backgroundImageLabel);
         backgroundImagePanel.setBackground(Color.white);
-
-
-        // buttonPanel
-        buttonPanel.setBackground(Color.white);
-        buttonPanel.setPreferredSize(new Dimension((int) screenSize.getWidth(), buttonPanelHeight));
-        buttonPanel.setLayout(new GridLayout(0,5));
-        buttonPanel.add(abstractFactoryControlPanel);
-        buttonPanel.add(behaviourControlPanel);
-        buttonPanel.add(decoratorControlPanel);
-        buttonPanel.add(mementoControlPanel);
-        buttonPanel.add(observerControlPanel);
+        backgroundImagePanel.add(backgroundImageLabel);
 
         //Abstract Factory
         tableLabel.setBounds(1120, 600, 260, 178);
@@ -157,7 +144,6 @@ public class MidAutumnSwing extends JFrame {
         int imageHeight = (int) (screenSize.getHeight() - buttonPanelHeight - 20);
         int imageWidth = (int) screenSize.getWidth();
         houseLayeredPanel.setBounds(0, 0, imageWidth, imageHeight);
-        backgroundImagePanel.add(houseImagePanel, JLayeredPane.DEFAULT_LAYER);
         houseLayeredPanel.setBounds(200, 250, 300, 300);
         backgroundImageLabel.add(houseLayeredPanel, JLayeredPane.PALETTE_LAYER);
 
