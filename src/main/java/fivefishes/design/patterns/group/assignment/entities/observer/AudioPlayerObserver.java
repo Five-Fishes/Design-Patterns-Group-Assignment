@@ -19,7 +19,7 @@ public class AudioPlayerObserver implements Observer {
             AudioInputStream audioIn = AudioSystem.getAudioInputStream(songFile);
             Clip clip = AudioSystem.getClip();
             clip.open(audioIn);
-//            clip.start();
+            clip.start();
         } catch (IOException | UnsupportedAudioFileException | LineUnavailableException e) {
             System.out.println("error occur!");
             System.out.println(e);
