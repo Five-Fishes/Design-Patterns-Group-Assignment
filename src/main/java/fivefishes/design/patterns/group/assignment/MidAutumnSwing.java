@@ -1,180 +1,187 @@
 package fivefishes.design.patterns.group.assignment;
 
+import fivefishes.design.patterns.group.assignment.components.ButtonPanel;
+import fivefishes.design.patterns.group.assignment.components.DesignPatternControlPanel;
+import fivefishes.design.patterns.group.assignment.components.TableLabel;
+import fivefishes.design.patterns.group.assignment.components.abstractFactory.*;
+import fivefishes.design.patterns.group.assignment.components.strategy.StrategyControlPanel;
+import fivefishes.design.patterns.group.assignment.components.strategy.LanternLabel;
+import fivefishes.design.patterns.group.assignment.components.decorator.*;
+import fivefishes.design.patterns.group.assignment.components.memento.MementoControlPanel;
+import fivefishes.design.patterns.group.assignment.components.observer.*;
+import fivefishes.design.patterns.group.assignment.controllers.abstractFactory.AbstractFactoryController;
+import fivefishes.design.patterns.group.assignment.controllers.strategy.LightBehaviourController;
+import fivefishes.design.patterns.group.assignment.controllers.decorator.HouseController;
+import fivefishes.design.patterns.group.assignment.controllers.memento.MementoController;
+import fivefishes.design.patterns.group.assignment.controllers.observer.ObserverController;
+import fivefishes.design.patterns.group.assignment.entities.decorator.House;
+
+import fivefishes.design.patterns.group.assignment.entities.observer.*;
+import fivefishes.design.patterns.group.assignment.enumerations.observer.RabbitImage;
+import fivefishes.design.patterns.group.assignment.interfaces.observer.Observer;
+import fivefishes.design.patterns.group.assignment.workers.observer.SubjectWorker;
+import fivefishes.design.patterns.group.assignment.workers.observer.TimerWorker;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
-public class MidAutumnSwing extends JFrame implements ActionListener {
-    //Buttons
-    private JButton lightButton;
-    private JButton exitButton;
+public class MidAutumnSwing extends JFrame {
 
-    //Panels
-    private JPanel titlePanel, backgroundImagePanel, buttonPanel;
-
-    //Labels
-    private JLabel title, backgroundImageLabel;
-
-    //Image
-    private BufferedImage image;
-
-
-    private boolean lights = false;
-
-    private int imageHeight;
-    private Image resizedImage;
-
+    // General
+    private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     private final int buttonPanelHeight = 150;
+    private JPanel backgroundImagePanel = new JPanel();
+    private JLabel backgroundImageLabel;
+
+    // Background
+    private Image backgroundResizedImage;
+    private int imageHeight;
+    private int imageWidth;
     private int imageStartXaxis;
     private int imageStartYaxis;
-    private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-    private String testImageUrl;
-    private Image testImage;
-    private String staticTestImageUrl = "src/main/java/fivefishes/design/patterns/group/assignment/resources/ChangEr/redblue.png";
-    private Image staticTestImage;
+    //Abstract Factory
+    private TableLabel tableLabel = new TableLabel();
+    private MooncakeDescriptionPanel mooncakeDescriptionPanel = new MooncakeDescriptionPanel();
+    private MooncakeLabel mooncakeLabel = new MooncakeLabel(mooncakeDescriptionPanel);
+    private AbstractFactoryController abstractFactoryController = new AbstractFactoryController(mooncakeDescriptionPanel, mooncakeLabel);
+
+    // Decorator
+    House house = new House();
+    JLayeredPane houseLayeredPanel = new JLayeredPane();
+    JLabel houseLabel = house.getImages().get(0);
+    HouseController houseController = new HouseController(houseLayeredPanel, house, this);
+    HouseImagePanel houseImagePanel = new HouseImagePanel();
+
+    // Memento
+    private JLabel changErLabel = new JLabel();
+    private MementoController mementoController = new MementoController(changErLabel);
+
+    // Observer
+    private TimerLabel timerLabel = new TimerLabel();
+    private RabbitGifLabel dancingRabbitLabel = new RabbitGifLabel(RabbitImage.Dancing);
+    private RabbitGifLabel singingRabbitLabel = new RabbitGifLabel(RabbitImage.Singing);
+    private AudioPlayerObserver audioPlayerObserver = new AudioPlayerObserver();
+    private RabbitObserver rabbitObserver = new RabbitObserver(dancingRabbitLabel, singingRabbitLabel);
+    private ClockSubject clockSubject = new ClockSubject(
+            new HashSet<Observer>() {{
+                add(audioPlayerObserver);
+                add(rabbitObserver);
+            }}
+    );
+    private ObserverController observerController = new ObserverController(clockSubject, audioPlayerObserver, rabbitObserver);
+    SubjectWorker subjectWorker = new SubjectWorker(clockSubject);
+    TimerWorker timerWorker = new TimerWorker(timerLabel);
+    ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
+
+    // Strategy
+    private LanternLabel lanternLabel = new LanternLabel();
+    private LightBehaviourController lightBehaviourController = new LightBehaviourController(lanternLabel);
+
+    private DesignPatternControlPanel abstractFactoryControlPanel = new AbstractFactoryControlPanel("Abstract Factory", abstractFactoryController);
+    private DesignPatternControlPanel decoratorControlPanel = new DecoratorControlPanel("Decorator", houseController);
+    private DesignPatternControlPanel mementoControlPanel = new MementoControlPanel("Memento", "Only 5 ChangEr will be saved in history", mementoController);
+    private DesignPatternControlPanel observerControlPanel = new ObserverControlPanel("Observer", observerController, timerLabel);
+    private DesignPatternControlPanel strategyControlPanel = new StrategyControlPanel("Strategy", lightBehaviourController);
+
+    private Dimension buttonPanelDimension = new Dimension((int) screenSize.getWidth(), buttonPanelHeight);
+    private List<DesignPatternControlPanel> designPatternControlPanels = new ArrayList<DesignPatternControlPanel>() {{
+        add(abstractFactoryControlPanel);
+        add(decoratorControlPanel);
+        add(mementoControlPanel);
+        add(observerControlPanel);
+        add(strategyControlPanel);
+    }};
+    private ButtonPanel buttonPanel = new ButtonPanel(designPatternControlPanels, buttonPanelDimension);
 
     public MidAutumnSwing() {
-        //Set title
-        setTitle("Decorate the Christmas tree!");
 
-        setLayout(new BorderLayout());
+        // General
+        this.setTitle("MidAutumn Festival");
+        this.setLayout(new BorderLayout());
+        this.add(backgroundImagePanel, BorderLayout.CENTER);
+        this.add(buttonPanel, BorderLayout.SOUTH);
+        this.getContentPane().setBackground(Color.white);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setSize(screenSize);
+        this.setLocation(0, 0);
+        this.setVisible(true);
 
-        //Setting the title of the JLabel
-        title = new JLabel("Creative Designed By 30000007333 From <a href=\"https://lovepik.com/image-400492940/mid-autumn-festival-background.html\">LovePik.com</a>");
+        // Background
+        backgroundImageConfiguration();
+        backgroundImageLabel = new JLabel(new ImageIcon(backgroundResizedImage));
+        backgroundImagePanel.setBackground(Color.white);
+        backgroundImagePanel.add(backgroundImageLabel);
 
-        //Setting the font
-        title.setFont(new Font("CENTURY GOTHIC", Font.ITALIC, 15));
+        //Abstract Factory
+        int tableXaxis = imageStartXaxis + imageWidth - 725;
+        int tableYaxis = imageHeight - 205;
+        int mooncakeXaxis = tableXaxis + 15;
+        int mooncakeYaxis = tableYaxis - 30;
+        tableLabel.setBounds(tableXaxis, tableYaxis, 260, 178);
+        mooncakeLabel.setBounds(mooncakeXaxis, mooncakeYaxis, 207, 53);
+        backgroundImageLabel.add(mooncakeDescriptionPanel);
+        backgroundImageLabel.add(mooncakeLabel);
+        backgroundImageLabel.add(tableLabel);
+        mooncakeDescriptionPanel.setBounds(tableXaxis - 20, 20, 380, 300);
+        mooncakeDescriptionPanel.setLayout(new BoxLayout(mooncakeDescriptionPanel, BoxLayout.Y_AXIS));
+        mooncakeDescriptionPanel.setVisible(false);
 
-        //Setting the text colour to red and positioning it to the centre
-        title.setForeground(Color.red);
-        title.setHorizontalAlignment(SwingConstants.CENTER);
+        // Strategy
+        int laternXaxis = imageStartXaxis + 300;
+        int laternYaxis = imageStartYaxis + 150;
+        lanternLabel.setBounds(laternXaxis, laternYaxis, 200, 200);
+        backgroundImageLabel.add(lanternLabel);
 
-        //Creating a new JPanel and adding the title label to it
-        titlePanel = new JPanel();
-        titlePanel.add(title);
+        // Decorator
+        houseLabel.setBounds(0, 0, 300, 300);
+        houseLayeredPanel.add(houseLabel, JLayeredPane.DEFAULT_LAYER);
+//        houseLayeredPanel.setBounds(0, 0, imageWidth, imageHeight);
+        int houseYaxis = imageHeight - 315;
+        houseLayeredPanel.setBounds(200, houseYaxis, 300, 300);
+        backgroundImageLabel.add(houseLayeredPanel, JLayeredPane.PALETTE_LAYER);
 
-        //Setting colour of title panel
-        titlePanel.setBackground(Color.white);
+        // Memento
+        int changErImageXaxis = imageStartXaxis + imageWidth - 350;
+        int changErImageYaxis = 0;
+        changErLabel.setBounds(changErImageXaxis, changErImageYaxis, 300, 300);
+        backgroundImageLabel.add(changErLabel);
 
-        //Creating a new JPanel for the image to go
-        backgroundImagePanel = new JPanel();
+        // Observer
+        new Thread(timerWorker).start();
+        executorService.scheduleAtFixedRate(subjectWorker, 0, 1, TimeUnit.MINUTES);
+        int rabbitXaxis = imageStartXaxis + imageWidth - 325;
+        int rabbitYaxis = imageHeight - 180;
+        dancingRabbitLabel.setBounds(rabbitXaxis, rabbitYaxis, 500, 178);
+        singingRabbitLabel.setBounds(rabbitXaxis - 100, rabbitYaxis, 500, 178);
+        backgroundImageLabel.add(dancingRabbitLabel);
+        backgroundImageLabel.add(singingRabbitLabel);
+        
+    }//Constructor
 
-        //Retrieving image from the file
+
+    private void backgroundImageConfiguration() {
+        BufferedImage image = null;
         try {
             image = ImageIO.read(new File("src/main/java/fivefishes/design/patterns/group/assignment/resources/background.jpg"));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-
-        backgroundImageConfiguration();
-        //Adding the image to a label
-        backgroundImageLabel = new JLabel(new ImageIcon(resizedImage));
-
-        backgroundImagePanel.add(backgroundImageLabel);
-        backgroundImagePanel.setBackground(Color.white);
-
-        //Creating a new JPanel for the buttons to go
-        buttonPanel = new JPanel();
-
-        //Setting colour of button panel
-        buttonPanel.setBackground(Color.white);
-
-        //Naming buttons
-        lightButton = new JButton("Lights");
-        exitButton = new JButton("Exit");
-
-        //Setting colour of buttons
-        lightButton.setBackground(Color.red);
-        exitButton.setBackground(Color.red);
-
-        //Setting font on buttons
-        lightButton.setFont(new Font("CENTURY GOTHIC", Font.ITALIC, 16));
-        exitButton.setFont(new Font("CENTURY GOTHIC", Font.ITALIC, 16));
-
-        //Setting font colour on buttons
-        lightButton.setForeground(Color.white);
-        exitButton.setForeground(Color.white);
-
-        //Add the buttons to the buttonPanel
-        buttonPanel.add(lightButton);
-        buttonPanel.add(exitButton);
-
-        //Enable buttons to listen for a mouse-click
-        lightButton.addActionListener(this);
-        exitButton.addActionListener(this);
-
-        //Positioning Panels
-        add(titlePanel, BorderLayout.NORTH);
-        add(backgroundImagePanel, BorderLayout.CENTER);
-        add(buttonPanel, BorderLayout.SOUTH);
-
-        // set buttonPanel width and height
-        buttonPanel.setPreferredSize(new Dimension((int) screenSize.getWidth(), buttonPanelHeight));
-
-        testImageUrl = "src/main/java/fivefishes/design/patterns/group/assignment/resources/ChangEr/redblue.png";
-        try {
-            testImage = ImageIO.read(new File(testImageUrl));
-            staticTestImage = ImageIO.read(new File(staticTestImageUrl));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        testImage = testImage.getScaledInstance(-1, 100, Image. SCALE_SMOOTH);
-        staticTestImage = staticTestImage.getScaledInstance(-1, 150, Image.SCALE_SMOOTH);
-
-        //Configure the frame
-//        getContentPane().setBackground(Color.white);
-//        getContentPane().add(panelContainer);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(screenSize);
-        setLocation(0, 0);
-        setVisible(true);
-
-    }//Constructor
-
-    public void paint(Graphics g) {
-        //Call the paint method of the superclass
-        super.paint(g);
-
-        // Perform drawing here using g.drawImage()
-        g.drawImage(testImage, 100, 100, null);
-        g.drawImage(staticTestImage, 500, 500, null);
-    } //paint
-
-    //Coding the event-handling routine
-    public void actionPerformed(ActionEvent event) {
-
-        if (event.getSource() == lightButton) {
-            lights = true;
-            testImageUrl = "src/main/java/fivefishes/design/patterns/group/assignment/resources/ChangEr/lightgreen.png";
-            try {
-                testImage = ImageIO.read(new File(testImageUrl));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            testImage = testImage.getScaledInstance(-1, 100, Image. SCALE_SMOOTH);
-            repaint();
-
-        }//if light
-
-        else {
-            System.exit(0);
-
-        }//else exit
-
-    } //actionPerformed
-
-    private void backgroundImageConfiguration() {
         imageHeight = (int) (screenSize.getHeight() - buttonPanelHeight - 20);
-        resizedImage = image.getScaledInstance(-1, imageHeight, Image. SCALE_SMOOTH);
+        backgroundResizedImage = image.getScaledInstance(-1, imageHeight, Image.SCALE_SMOOTH);
 
-        imageStartXaxis = (int) (screenSize.getWidth() - resizedImage.getWidth(null)) / 2;
+        imageWidth = backgroundResizedImage.getWidth(null);
+        imageStartXaxis = (int) (screenSize.getWidth() - backgroundResizedImage.getWidth(null)) / 2;
         imageStartYaxis = 10;
     }
-
 }//class
