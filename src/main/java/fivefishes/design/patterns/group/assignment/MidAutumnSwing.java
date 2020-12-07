@@ -160,7 +160,6 @@ public class MidAutumnSwing extends JFrame {
         // Observer
         new Thread(timerWorker).start();
         executorService.scheduleAtFixedRate(subjectWorker, 0, 1, TimeUnit.MINUTES);
-        System.out.println(imageHeight+", "+screenSize);
         int rabbitXaxis = imageStartXaxis + imageWidth - 325;
         int rabbitYaxis = imageHeight - 180;
         dancingRabbitLabel.setBounds(rabbitXaxis, rabbitYaxis, 500, 178);
