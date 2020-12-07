@@ -14,8 +14,6 @@ public class LanternLabel extends JLabel {
 
     Image resizedLanternImage = null;
     private Lantern lantern;
-    private int lanternImageStartXaxis = 400;
-    private int lanternImageStartYaxis = 200;
 
     public LanternLabel() {
         BufferedImage lanternImage = null;
@@ -25,30 +23,24 @@ public class LanternLabel extends JLabel {
             e.printStackTrace();
         }
         this.lantern = new Lantern(lanternImage, new NoLight());
-        Image resizedLanternImage = lantern.getBaseImage().getScaledInstance(-1, 100, Image.SCALE_SMOOTH);
-        this.setIcon(new ImageIcon(resizedLanternImage));
+        resizedLanternImage = lantern.getBaseImage().getScaledInstance(-1, 100, Image.SCALE_SMOOTH);
     }
 
-//    @Override
-//    public void paintComponent(Graphics g) {
-//        super.paintComponent(g);
-//        if (lantern != null) {
-//            int lanternHeight = resizedLanternImage.getHeight(null);
-//            int lanternWidth = resizedLanternImage.getWidth(null);
-//            int lanternCenterX = lanternImageStartXaxis + lanternWidth / 2;
-//            int lanternCenterY = lanternImageStartYaxis + lanternHeight / 2;
-//            int lanternRadiusRatio = lantern.getLightRadiusRatio();
-//            float lanternIntensity = lantern.getLightIntensity();
-//            float[] Fractions = {0.5f, 1.0f};
-//            Color[] Colors = {new Color(1f, 1f, 1f, lanternIntensity), new Color(1f, 1f, 0f, 0.0f)};
-//            if (lanternRadiusRatio != 0) { //if dim light no repainting, else it will throw exception
-//                Paint paint = new RadialGradientPaint(lanternCenterX, lanternCenterY, lanternWidth * lanternRadiusRatio / 2, Fractions, Colors);
-//                Graphics2D g2 = (Graphics2D) g;
-//                g2.setPaint(paint);
-//                g2.fillOval(lanternCenterX - (lanternHeight * lanternRadiusRatio) / 2, lanternCenterY - (lanternHeight * lanternRadiusRatio) / 2, lanternHeight * lanternRadiusRatio, lanternHeight * lanternRadiusRatio);
-//            }
-//        }
-//    } //paint
+    @Override
+    public void paintComponent(Graphics g) {
+        if (resizedLanternImage != null) {
+            float lanternIntensity = lantern.getLightIntensity();
+            Graphics2D g2 = (Graphics2D) g;
+            int start = (int)(lanternIntensity/0.02f)-1;
+            for(int i = start; i > 0 ; i--){ //use for loop to paint from big circle to the smallest circle to imitate light
+                g2.setColor(new Color(1f, 1f, 1f, 0.02f));
+                g2.fillOval(47-(i*2), 65-(i*2), 50+(i*2*2), 50+(i*2*2));
+            }
+        }
+        g.drawImage(resizedLanternImage, 50, 50, this);
+        revalidate();
+        super.paintComponent(g);
+    } //paint
 
     public Lantern getLantern() {
         return lantern;
