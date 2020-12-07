@@ -1,11 +1,14 @@
 package fivefishes.design.patterns.group.assignment;
 
+import fivefishes.design.patterns.group.assignment.components.DesignPatternControlPanel;
 import fivefishes.design.patterns.group.assignment.components.TableLabel;
 import fivefishes.design.patterns.group.assignment.components.abstractFactory.*;
+import fivefishes.design.patterns.group.assignment.components.behaviour.BehaviourControlPanel;
 import fivefishes.design.patterns.group.assignment.components.behaviour.LanternLabel;
 import fivefishes.design.patterns.group.assignment.components.behaviour.LanternLightComboBox;
 import fivefishes.design.patterns.group.assignment.components.decorator.*;
 import fivefishes.design.patterns.group.assignment.components.memento.ChangErFashionComboBox;
+import fivefishes.design.patterns.group.assignment.components.memento.MementoControlPanel;
 import fivefishes.design.patterns.group.assignment.components.memento.RedoButton;
 import fivefishes.design.patterns.group.assignment.components.memento.UndoButton;
 import fivefishes.design.patterns.group.assignment.components.observer.*;
@@ -46,7 +49,6 @@ public class MidAutumnSwing extends JFrame {
     // General
     private JPanel backgroundImagePanel = new JPanel();
     private JPanel buttonPanel = new JPanel();
-    private JPanel infoPanel = new JPanel();
     private JLabel backgroundImageLabel;
 
     private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -63,36 +65,26 @@ public class MidAutumnSwing extends JFrame {
     private MooncakeDescriptionPanel mooncakeDescriptionPanel = new MooncakeDescriptionPanel();
     private MooncakeLabel mooncakeLabel = new MooncakeLabel(mooncakeDescriptionPanel);
     private AbstractFactoryController abstractFactoryController = new AbstractFactoryController(mooncakeDescriptionPanel, mooncakeLabel);
-    private AddMooncakeButton addMooncakeButton = new AddMooncakeButton(abstractFactoryController);
-    private MooncakeStyleComboBox mooncakeStyleComboBox = new MooncakeStyleComboBox(abstractFactoryController);
-    private MooncakeFlavorComboBox mooncakeFlavorComboBox = new MooncakeFlavorComboBox(abstractFactoryController);
 
     // Behaviour
     private LanternLabel lanternLabel = new LanternLabel();
     private LightBehaviourController lightBehaviourController = new LightBehaviourController(lanternLabel);
-    private LanternLightComboBox lanternLightComboBox = new LanternLightComboBox(lightBehaviourController);
 
     // Decorator
     House house = new House();
     JLayeredPane houseLayeredPanel = new JLayeredPane();
     JLabel houseLabel = house.getImages().get(0);
     HouseController houseController = new HouseController(houseLayeredPanel, house, this);
-    DecoratorComboBox decoratorComboBox = new DecoratorComboBox(houseController);
-    ApplyDecorationButton applyDecorationButton = new ApplyDecorationButton(houseController);
-    ClearDecorationButton clearDecorationButton = new ClearDecorationButton(houseController);
     HouseImagePanel houseImagePanel = new HouseImagePanel();
 
     // Memento
     private JLabel changErLabel = new JLabel();
     private MementoController mementoController = new MementoController(changErLabel);
-    private UndoButton undoButton = new UndoButton(mementoController);
-    private RedoButton redoButton = new RedoButton(mementoController);
-    private ChangErFashionComboBox changErFashionComboBox = new ChangErFashionComboBox(mementoController);
     private int changErImageXaxis;
     private int changErImageYaxis;
 
     // Observer
-    private JLabel timerLabel = new TimerLabel();
+    private TimerLabel timerLabel = new TimerLabel();
     private RabbitGifLabel dancingRabbitLabel = new RabbitGifLabel(RabbitImage.Dancing);
     private RabbitGifLabel singingRabbitLabel = new RabbitGifLabel(RabbitImage.Singing);
     private AudioPlayerObserver audioPlayerObserver = new AudioPlayerObserver();
@@ -104,11 +96,15 @@ public class MidAutumnSwing extends JFrame {
             }}
     );
     private ObserverController observerController = new ObserverController(clockSubject, audioPlayerObserver, rabbitObserver);
-    private RabbitObserverCheckBox rabbitObserverCheckBox = new RabbitObserverCheckBox(observerController);
-    private AudioPlayerObserverCheckBox audioPlayerObserverCheckBox = new AudioPlayerObserverCheckBox(observerController);
     SubjectWorker subjectWorker = new SubjectWorker(clockSubject);
     TimerWorker timerWorker = new TimerWorker(timerLabel);
     ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
+
+    private DesignPatternControlPanel abstractFactoryControlPanel = new AbstractFactoryControlPanel("Abstract Factory", abstractFactoryController);
+    private DesignPatternControlPanel behaviourControlPanel = new BehaviourControlPanel("Behaviour", lightBehaviourController);
+    private DesignPatternControlPanel decoratorControlPanel = new DecoratorControlPanel("Decorator", houseController);
+    private DesignPatternControlPanel mementoControlPanel = new MementoControlPanel("Memento", "Only 5 ChangEr will be saved in history", mementoController);
+    private DesignPatternControlPanel observerControlPanel = new ObserverControlPanel("Observer", observerController, timerLabel);
 
     public MidAutumnSwing() {
 
@@ -130,15 +126,16 @@ public class MidAutumnSwing extends JFrame {
         backgroundImagePanel.add(backgroundImageLabel);
         backgroundImagePanel.setBackground(Color.white);
 
-        // infoPanel
-        infoPanel.add(new JLabel("Only 5 ChangEr will be saved in history"));
-        infoPanel.setBackground(Color.white);
 
         // buttonPanel
-        buttonPanel.add(infoPanel);
-        buttonPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         buttonPanel.setBackground(Color.white);
         buttonPanel.setPreferredSize(new Dimension((int) screenSize.getWidth(), buttonPanelHeight));
+        buttonPanel.setLayout(new GridLayout(0,5));
+        buttonPanel.add(abstractFactoryControlPanel);
+        buttonPanel.add(behaviourControlPanel);
+        buttonPanel.add(decoratorControlPanel);
+        buttonPanel.add(mementoControlPanel);
+        buttonPanel.add(observerControlPanel);
 
         //Abstract Factory
         tableLabel.setBounds(1120, 600, 260, 178);
@@ -149,14 +146,10 @@ public class MidAutumnSwing extends JFrame {
         mooncakeDescriptionPanel.setBounds(800, 300, 400, 300);
         mooncakeDescriptionPanel.setLayout(new BoxLayout(mooncakeDescriptionPanel, BoxLayout.Y_AXIS));
         mooncakeDescriptionPanel.setVisible(false);
-        buttonPanel.add(mooncakeStyleComboBox);
-        buttonPanel.add(mooncakeFlavorComboBox);
-        buttonPanel.add(addMooncakeButton);
 
         // Behaviour
         lanternLabel.setBounds(400, 200, 200, 200);
         backgroundImageLabel.add(lanternLabel);
-        buttonPanel.add(lanternLightComboBox);
 
         // Decorator
         houseLabel.setBounds(0, 0, 300, 300);
@@ -167,18 +160,12 @@ public class MidAutumnSwing extends JFrame {
         backgroundImagePanel.add(houseImagePanel, JLayeredPane.DEFAULT_LAYER);
         houseLayeredPanel.setBounds(200, 250, 300, 300);
         backgroundImageLabel.add(houseLayeredPanel, JLayeredPane.PALETTE_LAYER);
-        buttonPanel.add(decoratorComboBox);
-        buttonPanel.add(applyDecorationButton);
-        buttonPanel.add(clearDecorationButton);
 
         // Memento
         changErImageXaxis = (int) screenSize.getWidth() - 350;
         changErImageYaxis = 100;
         changErLabel.setBounds(changErImageXaxis, changErImageYaxis, 300, 300);
         backgroundImageLabel.add(changErLabel);
-        buttonPanel.add(undoButton);
-        buttonPanel.add(changErFashionComboBox);
-        buttonPanel.add(redoButton);
 
         // Observer
         new Thread(timerWorker).start();
@@ -187,9 +174,6 @@ public class MidAutumnSwing extends JFrame {
         singingRabbitLabel.setBounds(1100, 500, 500, 178);
         backgroundImageLabel.add(dancingRabbitLabel);
         backgroundImageLabel.add(singingRabbitLabel);
-        buttonPanel.add(timerLabel);
-        buttonPanel.add(rabbitObserverCheckBox);
-        buttonPanel.add(audioPlayerObserverCheckBox);
         
     }//Constructor
 

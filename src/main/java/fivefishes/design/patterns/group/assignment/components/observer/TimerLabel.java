@@ -5,8 +5,7 @@ import javax.swing.*;
 public class TimerLabel extends JLabel {
 
     public TimerLabel() {
-        Runnable runnable = () -> {
-        };
+        Runnable runnable = () -> {};
         new Thread(runnable).start();
     }
 }
