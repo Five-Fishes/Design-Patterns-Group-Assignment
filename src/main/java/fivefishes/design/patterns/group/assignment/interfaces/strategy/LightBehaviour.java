@@ -1,5 +1,5 @@
 
-package fivefishes.design.patterns.group.assignment.interfaces.behaviour;
+package fivefishes.design.patterns.group.assignment.interfaces.strategy;
 
 public interface LightBehaviour {
     

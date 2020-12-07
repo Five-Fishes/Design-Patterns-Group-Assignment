@@ -4,13 +4,13 @@ import fivefishes.design.patterns.group.assignment.components.ButtonPanel;
 import fivefishes.design.patterns.group.assignment.components.DesignPatternControlPanel;
 import fivefishes.design.patterns.group.assignment.components.TableLabel;
 import fivefishes.design.patterns.group.assignment.components.abstractFactory.*;
-import fivefishes.design.patterns.group.assignment.components.behaviour.BehaviourControlPanel;
-import fivefishes.design.patterns.group.assignment.components.behaviour.LanternLabel;
+import fivefishes.design.patterns.group.assignment.components.strategy.StrategyControlPanel;
+import fivefishes.design.patterns.group.assignment.components.strategy.LanternLabel;
 import fivefishes.design.patterns.group.assignment.components.decorator.*;
 import fivefishes.design.patterns.group.assignment.components.memento.MementoControlPanel;
 import fivefishes.design.patterns.group.assignment.components.observer.*;
 import fivefishes.design.patterns.group.assignment.controllers.abstractFactory.AbstractFactoryController;
-import fivefishes.design.patterns.group.assignment.controllers.behaviour.LightBehaviourController;
+import fivefishes.design.patterns.group.assignment.controllers.strategy.LightBehaviourController;
 import fivefishes.design.patterns.group.assignment.controllers.decorator.HouseController;
 import fivefishes.design.patterns.group.assignment.controllers.memento.MementoController;
 import fivefishes.design.patterns.group.assignment.controllers.observer.ObserverController;
@@ -56,10 +56,6 @@ public class MidAutumnSwing extends JFrame {
     private MooncakeLabel mooncakeLabel = new MooncakeLabel(mooncakeDescriptionPanel);
     private AbstractFactoryController abstractFactoryController = new AbstractFactoryController(mooncakeDescriptionPanel, mooncakeLabel);
 
-    // Behaviour
-    private LanternLabel lanternLabel = new LanternLabel();
-    private LightBehaviourController lightBehaviourController = new LightBehaviourController(lanternLabel);
-
     // Decorator
     House house = new House();
     JLayeredPane houseLayeredPanel = new JLayeredPane();
@@ -88,19 +84,23 @@ public class MidAutumnSwing extends JFrame {
     TimerWorker timerWorker = new TimerWorker(timerLabel);
     ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
 
+    // Strategy
+    private LanternLabel lanternLabel = new LanternLabel();
+    private LightBehaviourController lightBehaviourController = new LightBehaviourController(lanternLabel);
+
     private DesignPatternControlPanel abstractFactoryControlPanel = new AbstractFactoryControlPanel("Abstract Factory", abstractFactoryController);
-    private DesignPatternControlPanel behaviourControlPanel = new BehaviourControlPanel("Behaviour", lightBehaviourController);
     private DesignPatternControlPanel decoratorControlPanel = new DecoratorControlPanel("Decorator", houseController);
     private DesignPatternControlPanel mementoControlPanel = new MementoControlPanel("Memento", "Only 5 ChangEr will be saved in history", mementoController);
     private DesignPatternControlPanel observerControlPanel = new ObserverControlPanel("Observer", observerController, timerLabel);
+    private DesignPatternControlPanel strategyControlPanel = new StrategyControlPanel("Strategy", lightBehaviourController);
 
     private Dimension buttonPanelDimension = new Dimension((int) screenSize.getWidth(), buttonPanelHeight);
     private List<DesignPatternControlPanel> designPatternControlPanels = new ArrayList<DesignPatternControlPanel>() {{
         add(abstractFactoryControlPanel);
-        add(behaviourControlPanel);
         add(decoratorControlPanel);
         add(mementoControlPanel);
         add(observerControlPanel);
+        add(strategyControlPanel);
     }};
     private ButtonPanel buttonPanel = new ButtonPanel(designPatternControlPanels, buttonPanelDimension);
 
@@ -137,7 +137,7 @@ public class MidAutumnSwing extends JFrame {
         mooncakeDescriptionPanel.setLayout(new BoxLayout(mooncakeDescriptionPanel, BoxLayout.Y_AXIS));
         mooncakeDescriptionPanel.setVisible(false);
 
-        // Behaviour
+        // Strategy
         int laternXaxis = imageStartXaxis + 300;
         int laternYaxis = imageStartYaxis + 150;
         lanternLabel.setBounds(laternXaxis, laternYaxis, 200, 200);

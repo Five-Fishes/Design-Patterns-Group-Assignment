@@ -1,10 +1,8 @@
-package fivefishes.design.patterns.group.assignment.controllers.behaviour;
+package fivefishes.design.patterns.group.assignment.controllers.strategy;
 
-import fivefishes.design.patterns.group.assignment.components.behaviour.LanternLabel;
-import fivefishes.design.patterns.group.assignment.entities.behaviour.*;
-import fivefishes.design.patterns.group.assignment.enumerations.behaviour.LightBrightness;
-
-import java.awt.*;
+import fivefishes.design.patterns.group.assignment.components.strategy.LanternLabel;
+import fivefishes.design.patterns.group.assignment.entities.strategy.*;
+import fivefishes.design.patterns.group.assignment.enumerations.strategy.LightBrightness;
 
 public class LightBehaviourController {
 

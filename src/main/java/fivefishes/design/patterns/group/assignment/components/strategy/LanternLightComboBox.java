@@ -1,8 +1,7 @@
-package fivefishes.design.patterns.group.assignment.components.behaviour;
+package fivefishes.design.patterns.group.assignment.components.strategy;
 
-import fivefishes.design.patterns.group.assignment.controllers.behaviour.LightBehaviourController;
-import fivefishes.design.patterns.group.assignment.enumerations.abstractFactory.MooncakeFlavor;
-import fivefishes.design.patterns.group.assignment.enumerations.behaviour.LightBrightness;
+import fivefishes.design.patterns.group.assignment.controllers.strategy.LightBehaviourController;
+import fivefishes.design.patterns.group.assignment.enumerations.strategy.LightBrightness;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

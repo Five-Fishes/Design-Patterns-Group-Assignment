@@ -1,7 +1,7 @@
-package fivefishes.design.patterns.group.assignment.components.behaviour;
+package fivefishes.design.patterns.group.assignment.components.strategy;
 
-import fivefishes.design.patterns.group.assignment.entities.behaviour.Lantern;
-import fivefishes.design.patterns.group.assignment.entities.behaviour.NoLight;
+import fivefishes.design.patterns.group.assignment.entities.strategy.Lantern;
+import fivefishes.design.patterns.group.assignment.entities.strategy.NoLight;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -18,7 +18,7 @@ public class LanternLabel extends JLabel {
     public LanternLabel() {
         BufferedImage lanternImage = null;
         try {
-            lanternImage = ImageIO.read(new File("src/main/java/fivefishes/design/patterns/group/assignment/resources/behaviour/green_lantern.png"));
+            lanternImage = ImageIO.read(new File("src/main/java/fivefishes/design/patterns/group/assignment/resources/strategy/green_lantern.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

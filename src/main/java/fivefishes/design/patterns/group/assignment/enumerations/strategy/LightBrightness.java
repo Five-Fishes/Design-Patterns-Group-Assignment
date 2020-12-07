@@ -1,4 +1,4 @@
-package fivefishes.design.patterns.group.assignment.enumerations.behaviour;
+package fivefishes.design.patterns.group.assignment.enumerations.strategy;
 
 public enum LightBrightness {
 
