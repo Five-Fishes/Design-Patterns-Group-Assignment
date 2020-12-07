@@ -133,7 +133,7 @@ public class MidAutumnSwing extends JFrame {
         backgroundImageLabel.add(mooncakeDescriptionPanel);
         backgroundImageLabel.add(mooncakeLabel);
         backgroundImageLabel.add(tableLabel);
-        mooncakeDescriptionPanel.setBounds(800, 300, 400, 300);
+        mooncakeDescriptionPanel.setBounds(tableXaxis - 20, 20, 380, 300);
         mooncakeDescriptionPanel.setLayout(new BoxLayout(mooncakeDescriptionPanel, BoxLayout.Y_AXIS));
         mooncakeDescriptionPanel.setVisible(false);
 
