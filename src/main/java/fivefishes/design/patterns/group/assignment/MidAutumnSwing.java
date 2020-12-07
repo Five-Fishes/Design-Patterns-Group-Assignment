@@ -46,6 +46,7 @@ public class MidAutumnSwing extends JFrame {
     // Background
     private Image backgroundResizedImage;
     private int imageHeight;
+    private int imageWidth;
     private int imageStartXaxis;
     private int imageStartYaxis;
 
@@ -69,8 +70,6 @@ public class MidAutumnSwing extends JFrame {
     // Memento
     private JLabel changErLabel = new JLabel();
     private MementoController mementoController = new MementoController(changErLabel);
-    private int changErImageXaxis;
-    private int changErImageYaxis;
 
     // Observer
     private TimerLabel timerLabel = new TimerLabel();
@@ -141,23 +140,21 @@ public class MidAutumnSwing extends JFrame {
         // Decorator
         houseLabel.setBounds(0, 0, 300, 300);
         houseLayeredPanel.add(houseLabel, JLayeredPane.DEFAULT_LAYER);
-        int imageHeight = (int) (screenSize.getHeight() - buttonPanelHeight - 20);
-        int imageWidth = (int) screenSize.getWidth();
         houseLayeredPanel.setBounds(0, 0, imageWidth, imageHeight);
-        houseLayeredPanel.setBounds(200, 250, 300, 300);
+        houseLayeredPanel.setBounds(200, 300, 300, 300);
         backgroundImageLabel.add(houseLayeredPanel, JLayeredPane.PALETTE_LAYER);
 
         // Memento
-        changErImageXaxis = (int) screenSize.getWidth() - 350;
-        changErImageYaxis = 100;
+        int changErImageXaxis = imageStartXaxis + imageWidth - 350;
+        int changErImageYaxis = 100;
         changErLabel.setBounds(changErImageXaxis, changErImageYaxis, 300, 300);
         backgroundImageLabel.add(changErLabel);
 
         // Observer
         new Thread(timerWorker).start();
         executorService.scheduleAtFixedRate(subjectWorker, 0, 1, TimeUnit.MINUTES);
-        dancingRabbitLabel.setBounds(800, 500, 500, 178);
-        singingRabbitLabel.setBounds(1100, 500, 500, 178);
+        dancingRabbitLabel.setBounds(changErImageXaxis, 500, 500, 178);
+        singingRabbitLabel.setBounds(changErImageXaxis - 100, 500, 500, 178);
         backgroundImageLabel.add(dancingRabbitLabel);
         backgroundImageLabel.add(singingRabbitLabel);
         
@@ -174,6 +171,7 @@ public class MidAutumnSwing extends JFrame {
         imageHeight = (int) (screenSize.getHeight() - buttonPanelHeight - 20);
         backgroundResizedImage = image.getScaledInstance(-1, imageHeight, Image.SCALE_SMOOTH);
 
+        imageWidth = backgroundResizedImage.getWidth(null);
         imageStartXaxis = (int) (screenSize.getWidth() - backgroundResizedImage.getWidth(null)) / 2;
         imageStartYaxis = 10;
     }
