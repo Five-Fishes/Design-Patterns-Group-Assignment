@@ -29,10 +29,6 @@ public class Lantern {
         this.lightBehaviour = lightBehaviour;
     }
     
-    public int getLightRadiusRatio(){
-        return lightBehaviour.lightRadiusRatio();
-    }
-    
     public float getLightIntensity(){
         return lightBehaviour.lightIntensity();
     }
