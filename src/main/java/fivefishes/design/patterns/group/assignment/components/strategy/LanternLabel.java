@@ -10,7 +10,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class LanternLabel extends JLabel {
+public class LanternLabel extends JComponent {
 
     Image resizedLanternImage = null;
     private Lantern lantern;
