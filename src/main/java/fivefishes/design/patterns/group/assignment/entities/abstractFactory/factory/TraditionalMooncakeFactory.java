@@ -28,11 +28,6 @@ public class TraditionalMooncakeFactory implements MooncakeFactory {
     }
 
     @Override
-    public GreenTeaPaste createGreenTeaPaste() {
-        return new GreenTea();
-    }
-
-    @Override
     public LotusSeedPaste createLotusSeedPaste() {
         return new LotusSeed();
     }

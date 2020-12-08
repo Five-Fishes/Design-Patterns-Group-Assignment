@@ -4,7 +4,6 @@ import fivefishes.design.patterns.group.assignment.interfaces.abstractFactory.Mo
 import fivefishes.design.patterns.group.assignment.entities.abstractFactory.ingredient.dough.Dough;
 import fivefishes.design.patterns.group.assignment.entities.abstractFactory.ingredient.fillings.Fillings;
 import fivefishes.design.patterns.group.assignment.entities.abstractFactory.ingredient.mooncakeImage.MooncakeImage;
-import fivefishes.design.patterns.group.assignment.entities.abstractFactory.ingredient.paste.GreenTeaPaste;
 import fivefishes.design.patterns.group.assignment.entities.abstractFactory.ingredient.paste.LotusSeedPaste;
 import fivefishes.design.patterns.group.assignment.entities.abstractFactory.ingredient.paste.RedBeanPaste;
 import fivefishes.design.patterns.group.assignment.entities.abstractFactory.ingredient.shape.Shape;
@@ -19,7 +18,6 @@ public abstract class Mooncake {
     Shape shape;
     RedBeanPaste redBeanPaste;
     LotusSeedPaste lotusSeedPaste;
-    GreenTeaPaste greenTeaPaste;
     Fillings yolk;
 
 
@@ -55,10 +53,6 @@ public abstract class Mooncake {
 
     public LotusSeedPaste getLotusSeedPaste() {
         return lotusSeedPaste;
-    }
-
-    public GreenTeaPaste getGreenTeaPaste() {
-        return greenTeaPaste;
     }
 
     public Fillings getYolk() {
