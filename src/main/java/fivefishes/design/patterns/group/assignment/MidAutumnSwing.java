@@ -90,7 +90,7 @@ public class MidAutumnSwing extends JFrame {
 
     private DesignPatternControlPanel abstractFactoryControlPanel = new AbstractFactoryControlPanel("Abstract Factory", abstractFactoryController);
     private DesignPatternControlPanel decoratorControlPanel = new DecoratorControlPanel("Decorator", houseController);
-    private DesignPatternControlPanel mementoControlPanel = new MementoControlPanel("Memento", "Only 5 ChangEr will be saved in history", mementoController);
+    private DesignPatternControlPanel mementoControlPanel = new MementoControlPanel("Memento", "Only 5 history max at a time", mementoController);
     private DesignPatternControlPanel observerControlPanel = new ObserverControlPanel("Observer", observerController, timerLabel);
     private DesignPatternControlPanel strategyControlPanel = new StrategyControlPanel("Strategy", lightBehaviourController);
 
