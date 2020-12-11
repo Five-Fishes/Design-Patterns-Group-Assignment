@@ -22,8 +22,8 @@ public class LanternLabel extends JComponent {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.lantern = new Lantern(lanternImage, new NoLight());
-        resizedLanternImage = lantern.getBaseImage().getScaledInstance(-1, 100, Image.SCALE_SMOOTH);
+        this.lantern = new Lantern(new NoLight());
+        resizedLanternImage = lanternImage.getScaledInstance(-1, 100, Image.SCALE_SMOOTH);
     }
 
     @Override
